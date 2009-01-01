@@ -64,16 +64,36 @@
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (load-library "git-emacs")
 
+; xml mode
+;path to where nxml is
+(set 'nxml-path "~/.emacs.d/nxml-mode/")
+(load (concat nxml-path "rng-auto.el"))
+ (add-to-list 'auto-mode-alist
+              (cons (concat "\\." (regexp-opt '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss") t) "\\'")
+                    'nxml-mode))
+  (unify-8859-on-decoding-mode)
+
+    (setq magic-mode-alist
+	  (cons '("<＼＼?xml " . nxml-mode)
+	  magic-mode-alist))
+   (fset 'xml-mode 'nxml-mode)
+
+
+
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
 (defalias 'ln 'linum)
-(defalias 'cor 'comment-region)
 (defalias 'bm 'blank-mode)
 (defalias 'cr 'comment-region)
- 
+(defalias 'xa 'nxml-complete) 
 
 (defun fullscreen ()
   (interactive)
   (set-frame-parameter nil 'fullscreen
 		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 (global-set-key [f11] 'fullscreen)
+
+;; window frame title
+(setq frame-title-format "emacs [%b %*%+ %f]")
+(setq icon-title-format "emacs [%b]")
+
