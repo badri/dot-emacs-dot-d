@@ -94,7 +94,10 @@
 (defalias 'ln 'linum)
 (defalias 'bm 'blank-mode)
 (defalias 'cr 'comment-region)
-(defalias 'xa 'nxml-complete) 
+(defalias 'xa 'nxml-complete)
+(defalias 'ir 'indent-region)
+(defalias 'sh 'show-entry)
+(defalias 'he 'hide-entry) 
 
 (defun fullscreen ()
   (interactive)
@@ -110,3 +113,6 @@
 (global-set-key "\C-w" 'backward-kill-word)
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
+
+; C-x rji will open init.el 
+(set-register ?i '(file . "~/.emacs.d/init.el"))
