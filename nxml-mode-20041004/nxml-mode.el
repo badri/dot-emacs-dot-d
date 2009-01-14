@@ -457,10 +457,11 @@ reference.")
     (define-key map "\C-c\C-o" nxml-outline-prefix-map)
     (define-key map [S-mouse-2] 'nxml-mouse-hide-direct-text-content)
     (define-key map "/" 'nxml-electric-slash)
-    (define-key map [C-return] 'nxml-complete) 
-    (when nxml-bind-meta-tab-to-complete-flag
-      (define-key map "\M-\t" 'nxml-complete))
-    map)
+    ;(define-key map [C-return] 'nxml-complete)
+    (define-key map "\C-c\C-c" 'nxml-complete) 
+;;     (when nxml-bind-meta-tab-to-complete-flag
+;;       (define-key map "\M-\t" 'nxml-complete))
+     map)
   "Keymap for nxml-mode.")
 
 (defsubst nxml-set-face (start end face)

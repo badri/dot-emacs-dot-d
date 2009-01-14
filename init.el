@@ -1,3 +1,4 @@
+
 (add-to-list 'load-path "~/.emacs.d")
 
 ; some GUI cleanups
@@ -97,7 +98,8 @@
 (defalias 'xa 'nxml-complete)
 (defalias 'ir 'indent-region)
 (defalias 'sh 'show-entry)
-(defalias 'he 'hide-entry) 
+(defalias 'he 'hide-entry)
+(defalias 'gl 'goto-line) 
 
 (defun fullscreen ()
   (interactive)
@@ -116,3 +118,6 @@
 
 ; C-x rji will open init.el 
 (set-register ?i '(file . "~/.emacs.d/init.el"))
+
+; php mode 
+(require 'php-mode)
