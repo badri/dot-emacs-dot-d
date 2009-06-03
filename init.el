@@ -32,6 +32,7 @@
 (defalias 'ln 'linum)
 (defalias 'bm 'blank-mode)
 (defalias 'cr 'comment-region)
+(defalias 'ucr 'uncomment-region)
 (defalias 'xa 'nxml-complete)
 (defalias 'ir 'indent-region)
 (defalias 'sh 'show-entry)
@@ -53,7 +54,7 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
 
-; C-x rji will open init.el 
+;; C-x rji will open init.el 
 (set-register ?i '(file . "~/.emacs.d/init.el"))
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -67,3 +68,14 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+;; for cycling buffers
+(autoload 'cycle-buffer "cycle-buffer" "Cycle forward." t)
+(autoload 'cycle-buffer-backward "cycle-buffer" "Cycle backward." t)
+(autoload 'cycle-buffer-permissive "cycle-buffer" "Cycle forward allowing *buffers*." t)
+(autoload 'cycle-buffer-backward-permissive "cycle-buffer" "Cycle backward allowing *buffers*." t)
+(autoload 'cycle-buffer-toggle-interesting "cycle-buffer" "Toggle if this buffer will be considered." t)
+(global-set-key "\M-p"        'cycle-buffer-backward)
+(global-set-key "\M-n"       'cycle-buffer)
+(global-set-key [(shift f9)]  'cycle-buffer-backward-permissive)
+(global-set-key [(shift f10)] 'cycle-buffer-permissive)
