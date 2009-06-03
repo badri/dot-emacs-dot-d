@@ -9,7 +9,7 @@
 (require 'ido)
 (ido-mode t)
 (require 'python)
-(load-library "badri-python")
+;; (load-library "badri-python")
 
 
 (load-library "badri-visual-nicities")
@@ -32,19 +32,6 @@
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (load-library "git-emacs")
 
-;; xml mode
-;path to where nxml is
-(set 'nxml-path "~/.emacs.d/nxml-mode/")
-(load (concat nxml-path "rng-auto.el"))
- (add-to-list 'auto-mode-alist
-              (cons (concat "\\." (regexp-opt '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss") t) "\\'")
-                    'nxml-mode))
-  (unify-8859-on-decoding-mode)
-
-    (setq magic-mode-alist
-	  (cons '("<＼＼?xml " . nxml-mode)
-	  magic-mode-alist))
-   (fset 'xml-mode 'nxml-mode)
 
 
 ;; org mode
