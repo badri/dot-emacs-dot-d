@@ -79,3 +79,7 @@
 (global-set-key "\M-n"       'cycle-buffer)
 (global-set-key [(shift f9)]  'cycle-buffer-backward-permissive)
 (global-set-key [(shift f10)] 'cycle-buffer-permissive)
+
+;; ejacs
+(add-to-list 'load-path "~/.emacs.d/ejacs")
+(autoload 'js-console "js-console" nil t)
