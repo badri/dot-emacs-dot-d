@@ -1,5 +1,6 @@
 
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/yasnippet-0.2.2")
 
 ; some GUI cleanups
 (scroll-bar-mode -1)
@@ -9,7 +10,7 @@
 (require 'ido)
 (ido-mode t)
 (require 'python)
-;;(load-library "badri-python")
+(load-library "badri-python-ac")
 (load-library "arc")
 
 
@@ -61,3 +62,15 @@
 
 ; C-x rji will open init.el 
 (set-register ?i '(file . "~/.emacs.d/init.el"))
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(inhibit-startup-screen t))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
