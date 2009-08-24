@@ -70,6 +70,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t)
+ '(weblogger-config-alist (quote (("codekludge" ("user" . "lakshminp") ("server-url" . "http://www.codekludge.com/xmlrpc.php") ("weblog" . "1")) ("default" ("user" . "lakshminp") ("server-url" . "http://www.codekludge.com/xmlrpc.php") ("weblog" . "1"))))))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -77,7 +78,7 @@
   ;; If there is more than one, they won't work right.
  )
 
-(load-file "weblogger.el")
+(load-file "~/.emacs.d/weblogger.el")
 (global-set-key "\C-cbs" 'weblogger-start-entry)
 ;; C-c b s will then switch to a new buffer where you can compose a
 ;; entry.
@@ -109,3 +110,13 @@
 ;; C-c C-s w  -- Change the weblog.
 ;;
 ;; C-c C-s u  -- Change the user (re-login).
+;; for cycling buffers
+(autoload 'cycle-buffer "cycle-buffer" "Cycle forward." t)
+(autoload 'cycle-buffer-backward "cycle-buffer" "Cycle backward." t)
+(autoload 'cycle-buffer-permissive "cycle-buffer" "Cycle forward allowing *buffers*." t)
+(autoload 'cycle-buffer-backward-permissive "cycle-buffer" "Cycle backward allowing *buffers*." t)
+(autoload 'cycle-buffer-toggle-interesting "cycle-buffer" "Toggle if this buffer will be considered." t)
+(global-set-key "\M-p" 'cycle-buffer-backward)
+(global-set-key "\M-n" 'cycle-buffer)
+(global-set-key [(shift f9)] 'cycle-buffer-backward-permissive)
+(global-set-key [(shift f10)] 'cycle-buffer-permissive)
