@@ -1,6 +1,7 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.2.2")
+(add-to-list 'load-path "~/.emacs.d/egg")
 
 ; some GUI cleanups
 (scroll-bar-mode -1)
@@ -8,7 +9,8 @@
 (menu-bar-mode -1)
 
 (require 'ido)
-(ido-mode t)
+;;(ido-mode t)
+(ido-mode 'files)
 (require 'python)
 (load-library "badri-python-ac")
 (load-library "arc")
@@ -67,10 +69,43 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t))
+ '(inhibit-startup-screen t)
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+(load-file "weblogger.el")
+(global-set-key "\C-cbs" 'weblogger-start-entry)
+;; C-c b s will then switch to a new buffer where you can compose a
+;; entry.
+;;
+;; C-x C-s    -- post-and-publish current buffer to the weblog.
+;;               Calling weblogger-save-entry with an prefix argument
+;;               (i.e. C-u C-x C-s) will prompt for which weblog
+;;               to use.
+;;
+;; C-c C-c    -- identical to C-x C-s, but will also bury the buffer.
+;;
+;; C-c C-n    -- post (but not publish) the current entry and
+;;               load the next entry.
+;;
+;; C-c C-p    -- post (but not publish) the current entry and
+;;               load the previous entry.
+;;
+;; C-c C-k    -- delete the current entry.
+;;
+;; M-g        -- synchronise weblogger.el's idea of the entries available
+;;               with the weblog server.
+;;
+;; C-c C-t m  -- edit the main template.
+;;
+;; C-c C-t a  -- edit the Archive Index template
+;;
+;; C-c C-s s  -- Change the server being used.
+;;
+;; C-c C-s w  -- Change the weblog.
+;;
+;; C-c C-s u  -- Change the user (re-login).

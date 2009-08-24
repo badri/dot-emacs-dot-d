@@ -7,12 +7,24 @@
 ;; Copyright (C) 2006 Shun-ichi Goto
 ;;   Modified for non-ASCII character handling.
 
+;; Base on:
 ;; Author: Daniel Lundin <daniel@codefactory.se>
 ;; Maintainer: Mark A. Hershberger <mah@everybody.org>
 ;; Version: 1.6.4
 ;; Created: May 13 2001
 ;; Keywords: xml rpc network
 ;; URL: http://elisp.info/package/xml-rpc/
+
+;; IMPORTANT:
+;;
+;; This file was patched by Wickersheimer Jeremy <jwickers@gmail.com>
+;; if you notice any bug with it don't complain to Daniel Lundin
+;;
+;; It is modified to work with the modified weblogger.el, it is not
+;; tested with any other package.
+;;
+;; You can find the files and comment on http://jwickers.wordpress.com
+
 
 ;; This file is NOT (yet) part of GNU Emacs.
 
@@ -198,6 +210,10 @@ Set it higher to get some info in the *Messages* buffer")
 ;; Value type handling functions
 ;;
 
+(defun xml-rpc-value-datep (value)
+  "Return t if VALUE is a date."
+  (string-match "[0-9]\\{8\\}T\\([0-9]\\{2\\}:\\)\\{2\\}[0-9]\\{2\\}" value))
+
 (defun xml-rpc-value-intp (value)
   "Return t if VALUE is an integer."
   (integerp value))
@@ -308,6 +324,12 @@ functions in xml.el."
 					;    nil)
    ((xml-rpc-value-booleanp value)
     `((value nil (boolean nil ,(xml-rpc-boolean-to-string value)))))
+   ;; might be a vector
+   ((vectorp value)
+    (let ((myvec (append value nil)))
+      (xml-rpc-value-to-xml-list myvec)
+      )
+    )
    ((listp value)
     (let ((result nil)
 	  (xmlval nil))
@@ -329,6 +351,10 @@ functions in xml.el."
    ;; Value is a scalar
    ((xml-rpc-value-intp value)
     `((value nil (int nil ,(int-to-string value)))))
+   ;; Value is a Date ...
+   ((xml-rpc-value-datep value)
+    `((value nil (dateTime.iso8601 nil ,value))))
+   ;; Value is a string
    ((xml-rpc-value-stringp value)
     (let ((charset-list (find-charset-string value)))
       (if (or xml-rpc-allow-unicode-string
@@ -336,6 +362,7 @@ functions in xml.el."
 		   (eq 'ascii (car charset-list)))
 	      (not xml-rpc-base64-encode-unicode))
 	  `((value nil (string nil ,(url-insert-entities-in-string value))))
+	 ; `((value nil (string nil ,(concat "<![CDATA[" value "]]>"))))
 	`((value nil (base64 nil ,(base64-encode-string
 				   (encode-coding-string value 'utf-8))))))))
    ((xml-rpc-value-doublep value)
