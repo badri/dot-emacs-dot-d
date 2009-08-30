@@ -9,8 +9,7 @@
 (menu-bar-mode -1)
 
 (require 'ido)
-;;(ido-mode t)
-(ido-mode 'files)
+(ido-mode t)
 (require 'python)
 (load-library "badri-python-ac")
 (load-library "arc")
@@ -120,3 +119,8 @@
 (global-set-key "\M-n" 'cycle-buffer)
 (global-set-key [(shift f9)] 'cycle-buffer-backward-permissive)
 (global-set-key [(shift f10)] 'cycle-buffer-permissive)
+
+;; objective j support
+(load-file (expand-file-name "~/.emacs.d/objc-c-mode.el"))
+(load-file (expand-file-name "~/.emacs.d/objj-mode.el"))
+(require 'objj-mode)
