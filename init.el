@@ -55,6 +55,11 @@
 ;; window frame title
 (setq frame-title-format "emacs [%b %*%+ %f]")
 (setq icon-title-format "emacs [%b]")
+;; when running emacs from xterm, mimic the behaviour of frame/icon titles
+(when (and (not window-system)
+               (string-match "^xterm" (getenv "TERM")))
+      (require 'xterm-title)
+      (xterm-title-mode 1))
 
 ; backward kill word.
 (global-set-key "\C-w" 'backward-kill-word)
