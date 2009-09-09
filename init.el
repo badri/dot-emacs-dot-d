@@ -10,7 +10,7 @@
 
 (require 'ido)
 (ido-mode t)
-(require 'python)
+(load-library "badri-python")
 (load-library "badri-python-ac")
 (load-library "arc")
 
@@ -134,3 +134,8 @@
 (load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+
+;; git-emacs
+(add-to-list 'load-path "~/.emacs.d/git-emacs")
+(require 'git-emacs)
+
