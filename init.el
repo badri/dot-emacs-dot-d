@@ -40,11 +40,23 @@
 (defalias 'ln 'linum)
 (defalias 'bm 'blank-mode)
 (defalias 'cr 'comment-region)
+(defalias 'ur 'uncomment-region)
 (defalias 'xa 'nxml-complete)
 (defalias 'ir 'indent-region)
 (defalias 'sh 'show-entry)
 (defalias 'he 'hide-entry)
 (defalias 'gl 'goto-line) 
+
+(require 'ez)
+(global-unset-key  (kbd "C-f"))
+(global-unset-key  (kbd "C-b"))
+(global-unset-key  (kbd "C-n"))
+
+(global-set-key (kbd "C-n") 'af-bookmark-toggle)
+(global-set-key (kbd "C-f") 'af-bookmark-cycle-forward)
+(global-set-key (kbd "C-b") 'af-bookmark-cycle-reverse)
+;; (global-set-key "" 'af-bookmark-clear-all )
+
 
 (defun fullscreen ()
   (interactive)
@@ -139,3 +151,37 @@
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (require 'git-emacs)
 
+(global-set-key "\M-q" 'ido-kill-buffer)
+
+;;;
+;;; Org Mode
+;;;
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/org-mode/lisp"))
+(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+(require 'org-install)
+;;
+;; Standard key bindings
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+;; cscope
+(require 'xcscope)
+;; (define-key global-map [(control f3)]  'cscope-set-initial-directory)
+;; (define-key global-map [(control f4)]  'cscope-unset-initial-directory)
+;; (define-key global-map [(control f5)]  'cscope-find-this-symbol)
+;; (define-key global-map [(control f6)]  'cscope-find-global-definition)
+;; (define-key global-map [(control f7)]
+;;   'cscope-find-global-definition-no-prompting)
+;; (define-key global-map [(control f8)]  'cscope-pop-mark)
+;; (define-key global-map [(control f9)]  'cscope-next-symbol)
+;; (define-key global-map [(control f10)] 'cscope-next-file)
+;; (define-key global-map [(control f11)] 'cscope-prev-symbol)
+;; (define-key global-map [(control f12)] 'cscope-prev-file)
+;; (define-key global-map [(meta f9)]  'cscope-display-buffer)
+;; (define-key global-map [(meta f10)] 'cscope-display-buffer-toggle)
+
+;; tramp mode
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/tramp-2.1.16/lisp"))
+(require 'tramp)
+(setq tramp-default-method "ssh")
