@@ -18,12 +18,12 @@
 
 (cua-mode t)
 (load-library "badri-visual-nicities")
-(setq load-path (append (list (expand-file-name "~/.emacs.d/js2")) load-path))
+;;(setq load-path (append (list (expand-file-name "~/.emacs.d/js2")) load-path))
 
 ; Steve Yegge'e js2 mode.
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(load-library "js2")
+;;(autoload 'js2-mode "js2" nil t)
+;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;;(load-library "js2")
 
 
 (require 'pager)
@@ -148,8 +148,8 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 ;; git-emacs
-(add-to-list 'load-path "~/.emacs.d/git-emacs")
-(require 'git-emacs)
+;; (add-to-list 'load-path "~/.emacs.d/git-emacs")
+;; (require 'git-emacs)
 
 (global-set-key "\M-q" 'ido-kill-buffer)
 
@@ -185,3 +185,9 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/tramp-2.1.16/lisp"))
 (require 'tramp)
 (setq tramp-default-method "ssh")
+
+(autoload 'php-mode "php-mode" "Major mode for editing php code." t)
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.install$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.module$" . php-mode))
