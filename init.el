@@ -97,33 +97,39 @@
 (global-set-key "\M-q" 'ido-kill-buffer)
 
 
-;; cscope
-(require 'xcscope)
-;; (define-key global-map [(control f3)]  'cscope-set-initial-directory)
-;; (define-key global-map [(control f4)]  'cscope-unset-initial-directory)
-;; (define-key global-map [(control f5)]  'cscope-find-this-symbol)
-;; (define-key global-map [(control f6)]  'cscope-find-global-definition)
-;; (define-key global-map [(control f7)]
-;;   'cscope-find-global-definition-no-prompting)
-;; (define-key global-map [(control f8)]  'cscope-pop-mark)
-;; (define-key global-map [(control f9)]  'cscope-next-symbol)
-;; (define-key global-map [(control f10)] 'cscope-next-file)
-;; (define-key global-map [(control f11)] 'cscope-prev-symbol)
-;; (define-key global-map [(control f12)] 'cscope-prev-file)
-;; (define-key global-map [(meta f9)]  'cscope-display-buffer)
-;; (define-key global-map [(meta f10)] 'cscope-display-buffer-toggle)
-
 ;; tramp mode
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/tramp-2.1.16/lisp"))
 (require 'tramp)
 (setq tramp-default-method "ssh")
 
+;; php related stuff
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
+;; Drupal specific
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.install$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.module$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.profile$" . php-mode))
+;; Drupal coding standards
+(defun wicked/php-mode-init ()
+   "Set some buffer-local variables."
+   (setq case-fold-search t) 
+   (setq indent-tabs-mode nil)
+   (setq fill-column 78)
+   (setq c-basic-offset 2)
+   (c-set-offset 'arglist-cont 0)
+   (c-set-offset 'arglist-intro '+)
+   (c-set-offset 'case-label 2)
+   (c-set-offset 'arglist-close 0))
+ (add-hook 'php-mode-hook 'wicked/php-mode-init)
+;; for debugging
+(add-to-list 'load-path "~/.emacs.d/cedet-1.0.1/eieio")
+(load-file "~/.emacs.d/cedet-1.0.1/common/cedet.el")
+(global-ede-mode 1)
+;; (semantic-load-enable-code-helpers)
+;; (global-srecode-minor-mode 1)
+(add-to-list 'load-path "~/.emacs.d/geben-0.26")
+(autoload 'geben "geben" "PHP Debugger on Emacs" t)
 
 
 (require 'auto-complete)
