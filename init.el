@@ -1,18 +1,11 @@
 
 (add-to-list 'load-path "~/.emacs.d")
-(add-to-list 'load-path "~/.emacs.d/yasnippet-0.2.2")
-(add-to-list 'load-path "~/.emacs.d/egg")
 
 ; some GUI cleanups
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-
 (require 'ido)
 (ido-mode t)
-(load-library "badri-python")
-(load-library "badri-python-ac")
-(load-library "arc")
+(menu-bar-mode -1)
+
 
 
 
@@ -80,53 +73,7 @@
 
 ; C-x rji will open init.el 
 (set-register ?i '(file . "~/.emacs.d/init.el"))
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t)
- '(weblogger-config-alist (quote (("codekludge" ("user" . "lakshminp") ("server-url" . "http://www.codekludge.com/xmlrpc.php") ("weblog" . "1")) ("default" ("user" . "lakshminp") ("server-url" . "http://www.codekludge.com/xmlrpc.php") ("weblog" . "1"))))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
 
-(load-file "~/.emacs.d/weblogger.el")
-(global-set-key "\C-cbs" 'weblogger-start-entry)
-;; C-c b s will then switch to a new buffer where you can compose a
-;; entry.
-;;
-;; C-x C-s    -- post-and-publish current buffer to the weblog.
-;;               Calling weblogger-save-entry with an prefix argument
-;;               (i.e. C-u C-x C-s) will prompt for which weblog
-;;               to use.
-;;
-;; C-c C-c    -- identical to C-x C-s, but will also bury the buffer.
-;;
-;; C-c C-n    -- post (but not publish) the current entry and
-;;               load the next entry.
-;;
-;; C-c C-p    -- post (but not publish) the current entry and
-;;               load the previous entry.
-;;
-;; C-c C-k    -- delete the current entry.
-;;
-;; M-g        -- synchronise weblogger.el's idea of the entries available
-;;               with the weblog server.
-;;
-;; C-c C-t m  -- edit the main template.
-;;
-;; C-c C-t a  -- edit the Archive Index template
-;;
-;; C-c C-s s  -- Change the server being used.
-;;
-;; C-c C-s w  -- Change the weblog.
-;;
-;; C-c C-s u  -- Change the user (re-login).
-;; for cycling buffers
 (autoload 'cycle-buffer "cycle-buffer" "Cycle forward." t)
 (autoload 'cycle-buffer-backward "cycle-buffer" "Cycle backward." t)
 (autoload 'cycle-buffer-permissive "cycle-buffer" "Cycle forward allowing *buffers*." t)
@@ -137,10 +84,6 @@
 (global-set-key [(shift f9)] 'cycle-buffer-backward-permissive)
 (global-set-key [(shift f10)] 'cycle-buffer-permissive)
 
-;; objective j support
-(load-file (expand-file-name "~/.emacs.d/objc-c-mode.el"))
-(load-file (expand-file-name "~/.emacs.d/objj-mode.el"))
-(require 'objj-mode)
 
 ;; haskell
 (load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
@@ -153,17 +96,6 @@
 
 (global-set-key "\M-q" 'ido-kill-buffer)
 
-;;;
-;;; Org Mode
-;;;
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/org-mode/lisp"))
-(add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-(require 'org-install)
-;;
-;; Standard key bindings
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
 
 ;; cscope
 (require 'xcscope)
