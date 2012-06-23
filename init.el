@@ -18,6 +18,7 @@
 ;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 ;;(load-library "js2")
 
+(load-file "~/.emacs.d/cedet-1.1/common/cedet.el")
 
 (require 'pager)
 
@@ -123,14 +124,19 @@
    (c-set-offset 'arglist-close 0))
  (add-hook 'php-mode-hook 'wicked/php-mode-init)
 ;; for debugging
-(add-to-list 'load-path "~/.emacs.d/cedet-1.0.1/eieio")
-(load-file "~/.emacs.d/cedet-1.0.1/common/cedet.el")
 (global-ede-mode 1)
 ;; (semantic-load-enable-code-helpers)
 ;; (global-srecode-minor-mode 1)
 (add-to-list 'load-path "~/.emacs.d/geben-0.26")
 (autoload 'geben "geben" "PHP Debugger on Emacs" t)
-
+;; CTags support
+(setq path-to-ctags "/usr/bin/ctags") ;; <- your ctags path here
+  (defun create-tags (dir-name)
+    "Create tags file."
+    (interactive "DDirectory: ")
+    (shell-command
+     (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name)))
+  )
 
 (require 'auto-complete)
 (global-auto-complete-mode t)
@@ -144,3 +150,6 @@
 
 (define-key ac-complete-mode-map "\t" 'ac-complete)
 (define-key ac-complete-mode-map "\r" nil)
+
+(load-file "~/.emacs.d/find-file-in-tags.el")
+(global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
