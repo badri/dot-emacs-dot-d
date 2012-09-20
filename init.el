@@ -28,6 +28,9 @@
 ; to visualize tabs
 (require 'blank-mode)
 
+; named desktop sessions
+; taken from http://scottfrazersblog.blogspot.com/2009/12/emacs-named-desktop-sessions.html
+(require 'save-desktop)
 
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
@@ -39,7 +42,7 @@
 (defalias 'ir 'indent-region)
 (defalias 'sh 'show-entry)
 (defalias 'he 'hide-entry)
-(defalias 'gl 'goto-line) 
+(defalias 'gl 'goto-line)
 
 (require 'ez)
 (global-unset-key  (kbd "C-f"))
@@ -72,7 +75,7 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
 
-; C-x rji will open init.el 
+; C-x rji will open init.el
 (set-register ?i '(file . "~/.emacs.d/init.el"))
 
 (autoload 'cycle-buffer "cycle-buffer" "Cycle forward." t)
@@ -99,7 +102,6 @@
 
 
 ;; tramp mode
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/tramp-2.1.16/lisp"))
 (require 'tramp)
 (setq tramp-default-method "ssh")
 
@@ -111,10 +113,12 @@
 (add-to-list 'auto-mode-alist '("\\.install$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.module$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.profile$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.test$" . php-mode))
+
 ;; Drupal coding standards
 (defun wicked/php-mode-init ()
    "Set some buffer-local variables."
-   (setq case-fold-search t) 
+   (setq case-fold-search t)
    (setq indent-tabs-mode nil)
    (setq fill-column 78)
    (setq c-basic-offset 2)
@@ -153,3 +157,7 @@
 
 (load-file "~/.emacs.d/find-file-in-tags.el")
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
+
+(setq drupal-ide-load-path (concat user-emacs-directory "drupal/drupal-init.el"))
+(autoload 'drupal-ide drupal-ide-load-path "Start IDE for PHP & Drupal development" t)
+(load (concat user-emacs-directory "drupal/drupal-init.el"))
