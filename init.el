@@ -220,7 +220,6 @@
 (defalias 'bq 'markdown-insert-blockquote)
 (defalias 'ip 'markdown-insert-blockquote)
 (defalias 'ib 'markdown-insert-bold)
-(defalias 'if 'markdown-insert-footnote)
 (defalias 'h1 'markdown-insert-header-atx-1)
 (defalias 'h2 'markdown-insert-header-atx-2)
 (defalias 'h3 'markdown-insert-header-atx-3)
