@@ -161,3 +161,70 @@
 (setq drupal-ide-load-path (concat user-emacs-directory "drupal/drupal-init.el"))
 (autoload 'drupal-ide drupal-ide-load-path "Start IDE for PHP & Drupal development" t)
 (load (concat user-emacs-directory "drupal/drupal-init.el"))
+
+(defun django-shell (&optional argprompt)
+  (interactive "P")
+  ;; Set the default shell if not already set
+  (labels ((read-django-project-dir 
+	    (prompt dir)
+	    (let* ((dir (read-directory-name prompt dir))
+		          (manage (expand-file-name (concat dir "manage.py"))))
+	        (if (file-exists-p manage)
+		          (expand-file-name dir)
+		      (progn
+			      (message "%s is not a Django project directory" manage)
+			            (sleep-for .5)
+				          (read-django-project-dir prompt dir))))))
+(let* ((dir (read-django-project-dir 
+	          "project directory: " 
+		       default-directory))
+       (project-name (first 
+		            (remove-if (lambda (s) (or (string= "src" s) (string= "" s))) 
+				        (reverse (split-string dir "/")))))
+       (buffer-name (format "django-%s" project-name))
+       (manage (concat dir "manage.py")))
+  (cd dir)
+  (if (not (equal (buffer-name) buffer-name))
+      (switch-to-buffer-other-window
+       (apply 'make-comint buffer-name manage nil '("shell")))
+    (apply 'make-comint buffer-name manage nil '("shell")))
+  (make-local-variable 'comint-prompt-regexp)
+  (setq comint-prompt-regexp (concat py-shell-input-prompt-1-regexp "\\|"
+				          py-shell-input-prompt-2-regexp "\\|"
+					       "^([Pp]db) "))
+  (add-hook 'comint-output-filter-functions
+	        'py-comint-output-filter-function)
+  ;; pdbtrack
+
+  (add-hook 'comint-output-filter-functions 'py-pdbtrack-track-stack-file)
+  (setq py-pdbtrack-do-tracking-p t)
+  (set-syntax-table py-mode-syntax-table)
+  (use-local-map py-shell-map)
+  (run-hooks 'py-shell-hook))))
+
+;; cucumber mode
+(add-to-list 'load-path "~/.emacs.d/cucumber.el")
+(require 'feature-mode)
+(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
+
+;; markdown
+(load-file "~/.emacs.d/markdown-mode/markdown-mode.el")
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(defalias 'il 'markdown-insert-link)
+(defalias 'ii 'markdown-insert-image)
+(defalias 'ic 'markdown-insert-code)
+(defalias 'bq 'markdown-insert-blockquote)
+(defalias 'ip 'markdown-insert-blockquote)
+(defalias 'ib 'markdown-insert-bold)
+(defalias 'if 'markdown-insert-footnote)
+(defalias 'h1 'markdown-insert-header-atx-1)
+(defalias 'h2 'markdown-insert-header-atx-2)
+(defalias 'h3 'markdown-insert-header-atx-3)
+(defalias 'h4 'markdown-insert-header-atx-4)
+(defalias 'h5 'markdown-insert-header-atx-5)
+(defalias 'h6 'markdown-insert-header-atx-6)
+
