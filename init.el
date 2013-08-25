@@ -94,9 +94,6 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
-;; git-emacs
-;; (add-to-list 'load-path "~/.emacs.d/git-emacs")
-;; (require 'git-emacs)
 
 (global-set-key "\M-q" 'ido-kill-buffer)
 
@@ -228,7 +225,14 @@
 (defalias 'h6 'markdown-insert-header-atx-6)
 
 ;; Stuff for writing
+
 ;; org mode
-;; version control
+(setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
+(setq load-path (cons "~/.emacs.d/org-mode/contrib/lisp" load-path))
+;; The following lines are always needed.  Choose your own keys.
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode)) ; not needed since Emacs 22.2(
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
 ;; word wrap
 (add-hook `text-mode-hook 'turn-on-visual-line-mode)
