@@ -78,7 +78,7 @@
 ;; Autoload Drupal related files
 ;;
 (autoload 'drupal-mode "drupal-mode" "Major mode for Drupal." t)
-  (add-to-list 'auto-mode-alist '("\\.\\(module\\|test\\|install\\|theme\\)$" . drupal-mode))
+  (add-to-list 'auto-mode-alist '("\\.\\(module\\|test\\|profile\\|install\\|theme\\)$" . drupal-mode))
   (add-to-list 'auto-mode-alist '("\\.\\(php\\|inc\\)$" . drupal-mode))
   (add-to-list 'auto-mode-alist '("\\.info" . conf-windows-mode))
 

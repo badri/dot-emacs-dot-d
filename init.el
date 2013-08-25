@@ -204,8 +204,8 @@
 
 ;; cucumber mode
 (add-to-list 'load-path "~/.emacs.d/cucumber.el")
-(require 'feature-mode)
-(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
+;; (require 'feature-mode)
+;; (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
 
 ;; markdown
 (load-file "~/.emacs.d/markdown-mode/markdown-mode.el")
@@ -227,3 +227,8 @@
 (defalias 'h5 'markdown-insert-header-atx-5)
 (defalias 'h6 'markdown-insert-header-atx-6)
 
+;; Stuff for writing
+;; org mode
+;; version control
+;; word wrap
+(add-hook `text-mode-hook 'turn-on-visual-line-mode)

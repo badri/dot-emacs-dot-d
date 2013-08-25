@@ -4,9 +4,8 @@
   (interactive)
   (color-theme-install
    '(color-theme-badri
-     ((background-color . "gray7")
-      (background-mode . dark)
-      (background-toolbar-color . "#cf3ccf3ccf3c")
+     (
+      (background-toolbar-color . "#cf3ccf")
       (border-color . "black")
       (bottom-toolbar-shadow-color . "#79e77df779e7")
       (cursor-color . "DodgerBlue1")
@@ -39,7 +38,7 @@
       (tags-tag-face . default)
       (view-highlight-face . highlight)
       (widget-mouse-face . highlight))
-     (default ((t (:stipple nil :background "gray7" :foreground "gainsboro" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 141 :width normal :family "adobe-courier"))))
+     (default ((t (:stipple nil :background "#111111" :foreground "#dcdcdc" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 141 :width normal :family "adobe-courier"))))
      (Buffer-menu-buffer-face ((t (nil))))
      (CUA-global-mark-face ((t (nil))))
      (CUA-rectangle-face ((t (nil))))
@@ -324,7 +323,7 @@
      (font-lock-regexp-grouping-construct ((t (:bold t :weight bold))))
      (font-lock-special-comment-face ((t (nil))))
      (font-lock-special-keyword-face ((t (nil))))
-     (font-lock-string-face ((t (:foreground "LightGreen"))))
+     (font-lock-string-face ((t (:foreground "#8f9d6a"))))
      (font-lock-type-face ((t (:foreground "PaleGreen"))))
      (font-lock-variable-name-face ((t (:foreground "LightGoldenrod"))))
      (font-lock-warning-face ((t (:bold t :foreground "Pink" :weight bold))))
