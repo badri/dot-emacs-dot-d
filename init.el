@@ -240,3 +240,12 @@
 ;; scala
 (add-to-list 'load-path "~/.emacs.d/scala-mode2/")
 (require 'scala-mode2)
+
+
+;; drupal yasnippet mode
+(setq load-path (cons "~/.emacs.d/yasnippet/yasnippet.el" load-path))
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/yasnippet/snippets")
+(setq yas/root-directory "~/.emacs.d/drupal-yasnippet")
+(yas/load-directory yas/root-directory)
