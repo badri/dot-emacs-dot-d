@@ -236,3 +236,7 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 ;; word wrap
 (add-hook `text-mode-hook 'turn-on-visual-line-mode)
+
+;; scala
+(add-to-list 'load-path "~/.emacs.d/scala-mode2/")
+(require 'scala-mode2)
