@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: Hook Menu
+# key: hook_menu
+# --
+/**
+ * Implements hook_menu().
+ *
+ * TODO (`(getenv "USER")`): Add documentation explaining the new menu items.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_menu() {
+  $items = array();
+
+  $items['$1'] = array(
+    'title' => '$2',
+    'page callback' => '$0',
+    'page arguments' => array(),
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}

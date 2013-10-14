@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Comment Load
+# key: hook_comment_load
+# --
+/**
+ * Implements hook_comment_load().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_comment_load($comments) {
+$0
+}

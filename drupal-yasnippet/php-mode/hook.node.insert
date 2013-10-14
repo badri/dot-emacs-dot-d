@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Node Insert
+# key: hook_node_insert
+# --
+/**
+ * Implements hook_node_insert().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_node_insert($node) {
+$0
+}

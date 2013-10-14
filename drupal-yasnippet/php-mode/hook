@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Hook Template
+# key: hook
+# --
+/**
+ * Implements hook_$1().
+ *
+ * TODO (`(getenv "USER")`): Add method documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_$1($2) {
+  $0
+  return;
+}

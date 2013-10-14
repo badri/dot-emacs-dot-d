@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Node Presave
+# key: hook_node_presave
+# --
+/**
+ * Implements hook_node_presave().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_node_presave($node) {
+$0
+}

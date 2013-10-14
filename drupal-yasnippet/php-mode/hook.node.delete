@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Node Delete
+# key: hook_node_delete
+# --
+/**
+ * Implements hook_node_delete().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_node_delete($node) {
+$0
+}

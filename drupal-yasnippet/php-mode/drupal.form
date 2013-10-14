@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: Create a new form
+# key: drupal_form
+# --
+/**
+ * TODO (`(getenv "USER")`): Add documentation explaining this form.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_${1:FORM_NAME}_form($form, &$form_state) {
+$0  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+
+  return $form;
+}
+
+/**
+ * Validation handler for `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_$1_form.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_$1_form_validate($form, &$form_state) {
+}
+
+/**
+ * Submit handler for `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_$1_form.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_$1_form_submit($form, &$form_state) {
+}

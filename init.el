@@ -243,9 +243,11 @@
 
 
 ;; drupal yasnippet mode
-(setq load-path (cons "~/.emacs.d/yasnippet/yasnippet.el" load-path))
+(load-file "~/.emacs.d/yasnippet/yasnippet.el")
 (require 'yasnippet)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/yasnippet/snippets")
-(setq yas/root-directory "~/.emacs.d/drupal-yasnippet")
-(yas/load-directory yas/root-directory)
+
+(setq yas-snippet-dirs
+      '("~/.emacs.d/drupal-yasnippet"            ;; drupal snippets
+        ))
+
+(yas-global-mode 1)

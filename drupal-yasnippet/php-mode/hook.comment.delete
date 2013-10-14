@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Comment Delete
+# key: hook_comment_delete
+# --
+/**
+ * Implements hook_comment_delete().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_comment_delete($comment) {
+$0
+}

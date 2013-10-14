@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: Hook Permission
+# key: hook_permission
+# --
+/**
+ * Implements hook_permssion().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_permission() {
+  return array(
+    '${1:key}' => array(
+      'title' => '${0:title}',
+    ),
+  );
+}

@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+# name: Hook Block
+# key: hook_block
+# --
+/**
+ * Implements hook_block_info().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_block_info() {
+  $blocks = array();
+
+  $blocks['$3'] = array(
+    'info' => t('$4'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_block_view($delta = '') {
+  switch ($delta) {
+    case '$3':
+      return array('content' => '$0');
+      break;
+  }
+}

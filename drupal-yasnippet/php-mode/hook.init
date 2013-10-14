@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: Hook Init
+# key: hook_init
+# --
+/**
+ * Implements hook_init().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_init() {
+  // WARNING: Use of hook_init is pricey. This method is ran on every non-cached
+  // page load, and it's generally a better idea to find a better solution than
+  // using this hook.
+  $0
+}

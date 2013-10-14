@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Hook Form Alter
+# key: hook_form_alter
+# --
+/**
+ * Implements hook_form_alter().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);
+  $0
+  return $form;
+}

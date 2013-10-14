@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Comment Insert
+# key: hook_comment_insert
+# --
+/**
+ * Implements hook_comment_insert().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_comment_insert($comment) {
+$0
+}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Watchdog
+# key: watchdog
+# --
+watchdog("`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`", "${2:$message}", array(), ${4:$$(yas/choose-value '("WATCHDOG_NOTICE" "WATCHDOG_EMERGENCY" "WATCHDOG_ALERT" "WATCHDOG_CRITICAL" "WATCHDOG_ERROR" "WATCHDOG_WARNING" "WATCHDOG_INFO" "WATCHDOG_DEBUG"))});

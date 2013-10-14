@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Insert module name.
+# key: module_name
+# --
+`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`

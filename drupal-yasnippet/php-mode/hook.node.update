@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: Hook Node Update
+# key: hook_node_update
+# --
+/**
+ * Implements hook_node_update().
+ *
+ * NOTE: Changes to the node are not saved in the database yet. Updates will not
+ *       be written until node_save completes (after this function returns).
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_node_update($node) {
+$0
+}

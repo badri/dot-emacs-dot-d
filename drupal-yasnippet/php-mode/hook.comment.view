@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Comment View
+# key: hook_comment_view
+# --
+/**
+ * Implements hook_comment_view().
+ *
+ * TODO (`(getenv "USER")`): Add documentation.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_comment_view($comment, $view_mode, $langcode) {
+$0
+}

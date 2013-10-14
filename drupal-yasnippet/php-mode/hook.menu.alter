@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: Hook Menu Alter
+# key: hook_menu_alter
+# --
+/**
+ * Implements hook_menu_alter().
+ *
+ * TODO (`(getenv "USER")`): Add documentation explaining the new menu items.
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_menu_alter(&$items) {
+  ${1:// TODO (`(getenv "USER")`):: Modify the $items array}
+  return $items;
+}
