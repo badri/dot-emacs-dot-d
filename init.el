@@ -162,7 +162,7 @@
 (defun django-shell (&optional argprompt)
   (interactive "P")
   ;; Set the default shell if not already set
-  (labels ((read-django-project-dir 
+  (labels ((read-django-project-dir
 	    (prompt dir)
 	    (let* ((dir (read-directory-name prompt dir))
 		          (manage (expand-file-name (concat dir "manage.py"))))
@@ -172,11 +172,11 @@
 			      (message "%s is not a Django project directory" manage)
 			            (sleep-for .5)
 				          (read-django-project-dir prompt dir))))))
-(let* ((dir (read-django-project-dir 
-	          "project directory: " 
+(let* ((dir (read-django-project-dir
+	          "project directory: "
 		       default-directory))
-       (project-name (first 
-		            (remove-if (lambda (s) (or (string= "src" s) (string= "" s))) 
+       (project-name (first
+		            (remove-if (lambda (s) (or (string= "src" s) (string= "" s)))
 				        (reverse (split-string dir "/")))))
        (buffer-name (format "django-%s" project-name))
        (manage (concat dir "manage.py")))
@@ -251,3 +251,7 @@
         ))
 
 (yas-global-mode 1)
+
+;; magit
+(require 'magit)
+(global-set-key (kbd "\C-c\C-g") 'magit-status)
