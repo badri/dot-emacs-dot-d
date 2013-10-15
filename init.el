@@ -255,3 +255,12 @@
 ;; magit
 (require 'magit)
 (global-set-key (kbd "\C-c\C-g") 'magit-status)
+
+;; code folding
+(add-hook 'php-mode-hook
+  (lambda()
+    (local-set-key (kbd "C-c <right>") 'hs-show-block)
+    (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+    (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+    (local-set-key (kbd "C-c <down>")  'hs-show-all)
+    (hs-minor-mode t)))
