@@ -201,8 +201,8 @@
 
 ;; cucumber mode
 (add-to-list 'load-path "~/.emacs.d/cucumber.el")
-;; (require 'feature-mode)
-;; (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
+(require 'feature-mode)
+(add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
 
 ;; markdown
 (load-file "~/.emacs.d/markdown-mode/markdown-mode.el")
@@ -248,6 +248,7 @@
 
 (setq yas-snippet-dirs
       '("~/.emacs.d/drupal-yasnippet"            ;; drupal snippets
+	"~/.emacs.d/cucumber.el/snippets"
         ))
 
 (yas-global-mode 1)
