@@ -10,7 +10,6 @@
 
 
 (cua-mode t)
-(load-library "badri-visual-nicities")
 ;;(setq load-path (append (list (expand-file-name "~/.emacs.d/js2")) load-path))
 
 ; Steve Yegge'e js2 mode.
@@ -237,6 +236,14 @@
 ;; word wrap
 (add-hook `text-mode-hook 'turn-on-visual-line-mode)
 
+;; interactive wordcount
+(load-file "~/.emacs.d/wordcount-mode.el")
+
+;; inplace annotations
+(load-file "~/.emacs.d/ipa.el")
+
+;; ----------------------------------------------------------------
+
 ;; scala
 (add-to-list 'load-path "~/.emacs.d/scala-mode2/")
 (require 'scala-mode2)
@@ -264,3 +271,14 @@
     (local-set-key (kbd "C-c <up>")    'hs-hide-all)
     (local-set-key (kbd "C-c <down>")  'hs-show-all)
     (hs-minor-mode t)))
+
+;; hacker news
+(setq load-path (cons "~/.emacs.d/hackernews.el" load-path))
+(require 'hackernews)
+
+;; marmalade
+(require 'package)
+(add-to-list 'package-archives 
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
+(package-initialize)
