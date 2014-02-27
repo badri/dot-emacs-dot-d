@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: Hook Field Formatter View
+# key: hook_field_formatter_view
+# --
+/**
+ * Implements hook_field_formatter_view().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case '$1':
+      break;
+  }
+
+  return $element;
+}

@@ -10,7 +10,6 @@
 
 
 (cua-mode t)
-(load-library "badri-visual-nicities")
 ;;(setq load-path (append (list (expand-file-name "~/.emacs.d/js2")) load-path))
 
 ; Steve Yegge'e js2 mode.
@@ -43,6 +42,7 @@
 (defalias 'sh 'show-entry)
 (defalias 'he 'hide-entry)
 (defalias 'gl 'goto-line)
+(defalias 'wc 'whitespace-cleanup)
 
 (require 'ez)
 (global-unset-key  (kbd "C-f"))
@@ -265,3 +265,11 @@
     (local-set-key (kbd "C-c <up>")    'hs-hide-all)
     (local-set-key (kbd "C-c <down>")  'hs-show-all)
     (hs-minor-mode t)))
+
+(add-to-list 'load-path "~/.emacs.d/coffee-mode")
+(require 'coffee-mode)
+
+
+(add-to-list 'load-path "~/.emacs.d/scss-mode")
+(autoload 'scss-mode "scss-mode")
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))

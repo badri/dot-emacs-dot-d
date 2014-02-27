@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Hook Field Widget Form
+# key: hook_field_widget_form
+# --
+/**
+ * Implements hook_field_widget_form().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $1;
+}

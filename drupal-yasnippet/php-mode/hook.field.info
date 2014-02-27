@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: Hook Field Info
+# key: hook_field_info
+# --
+/**
+ * Implements hook_field_info().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_info() {
+  return array(
+    '$1' => array(
+      'label' => t('$2'),
+      'description' => t('$3'),
+      'default_widget' => '$4',
+      'default_formatter' => '$5',
+    ),
+  );
+}

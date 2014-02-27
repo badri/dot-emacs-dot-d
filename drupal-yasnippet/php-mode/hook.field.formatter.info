@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: Hook Field Formatter Info
+# key: hook_field_formatter_info
+# --
+/**
+ * Implements hook_field_formatter_info().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_formatter_info() {
+  return array(
+    '$1' => array(
+      'label' => t('$2'),
+      'field types' => array('$3'),
+    ),
+  );
+}

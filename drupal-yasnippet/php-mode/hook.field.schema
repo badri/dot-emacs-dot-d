@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: Hook Field Schema
+# key: hook_field_schema
+# --
+/**
+ * Implements hook_field_schema().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_schema($field) {
+  $columns = array(
+    '$1' => array('type' => 'varchar', 'length' => 7, 'not null' => FALSE),
+  );
+  $indexes = array(
+    '$1' => array('$1'),
+  );
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+  );
+}

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: Hook Field Validate
+# key: hook_field_validate
+# --
+/**
+ * Implements hook_field_validate().
+ */
+function `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    $1
+  }
+}
