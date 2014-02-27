@@ -237,6 +237,14 @@
 ;; word wrap
 (add-hook `text-mode-hook 'turn-on-visual-line-mode)
 
+;; interactive wordcount
+(load-file "~/.emacs.d/wordcount-mode.el")
+
+;; inplace annotations
+(load-file "~/.emacs.d/ipa.el")
+
+;; ----------------------------------------------------------------
+
 ;; scala
 (add-to-list 'load-path "~/.emacs.d/scala-mode2/")
 (require 'scala-mode2)
@@ -273,3 +281,10 @@
 (add-to-list 'load-path "~/.emacs.d/scss-mode")
 (autoload 'scss-mode "scss-mode")
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
+
+;; marmalade
+(require 'package)
+(add-to-list 'package-archives 
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
+(package-initialize)
