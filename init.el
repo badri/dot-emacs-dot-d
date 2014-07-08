@@ -262,7 +262,11 @@
 (yas-global-mode 1)
 
 ;; magit
+(add-to-list 'load-path "~/.emacs.d/git-modes")
 (add-to-list 'load-path "~/.emacs.d/magit")
+(eval-after-load 'info
+  '(progn (info-initialize)
+          (add-to-list 'Info-directory-list "~/.emacs.d/magit/")))
 (require 'magit)
 (global-set-key (kbd "\C-c\C-g") 'magit-status)
 
