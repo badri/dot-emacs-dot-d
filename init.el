@@ -328,6 +328,13 @@
 (require 'theme-changer)
 (change-theme 'zenburn 'light-soap)
 
+(setq calendar-location-name "Chennai, India") 
+(setq calendar-latitude 12.99)
+(setq calendar-longitude 80.2)
+
+(require 'theme-changer)
+(change-theme 'solarized-light 'zenburn)
+
 ;; naked emacs setup
 ;; Prevent the cursor from blinking
 (blink-cursor-mode 0)
@@ -350,25 +357,180 @@
     (set-frame-parameter
      nil 'fullscreen
      (when (not (frame-parameter nil 'fullscreen)) 'fullboth))))
-(toggle-fullscreen)
+;; (toggle-fullscreen)
 ;; Who use the bar to scroll?
 (scroll-bar-mode 0)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (set-default-font "Droid Sans Mono-12")
 
+;; org mode hacks
+ (setq org-todo-keywords
+       '((sequence "TODO" "CURRENT" "|" "DONE")))
+
+(defun org-my-custom-timestamp ()
+  (interactive)
+  (insert (format-time-string "%I:%M %p")))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key "\C-ct" 'org-my-custom-timestamp)))
+
+(defun org-my-custom-datestamp ()
+  (interactive)
+  (insert (format-time-string "%e %b %a")))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key "\C-cd" 'org-my-custom-datestamp)))
+
+(defun org-word-count (beg end
+                           &optional count-latex-macro-args?
+                           count-footnotes?)
+  "Report the number of words in the Org mode buffer or selected region.
+Ignores:
+- comments
+- tables
+- source code blocks (#+BEGIN_SRC ... #+END_SRC, and inline blocks)
+- hyperlinks (but does count words in hyperlink descriptions)
+- tags, priorities, and TODO keywords in headers
+- sections tagged as 'not for export'.
+
+The text of footnote definitions is ignored, unless the optional argument
+COUNT-FOOTNOTES? is non-nil.
+
+If the optional argument COUNT-LATEX-MACRO-ARGS? is non-nil, the word count
+includes LaTeX macro arguments (the material between {curly braces}).
+Otherwise, and by default, every LaTeX macro counts as 1 word regardless
+of its arguments."
+  (interactive "r")
+  (unless mark-active
+    (setf beg (point-min)
+          end (point-max)))
+  (let ((wc 0)
+        (latex-macro-regexp "\\\\[A-Za-z]+\\(\\[[^]]*\\]\\|\\){\\([^}]*\\)}"))
+    (save-excursion
+      (goto-char beg)
+      (while (< (point) end)
+        (cond
+         ;; Ignore comments.
+         ((or (org-in-commented-line) (org-at-table-p))
+          nil)
+         ;; Ignore hyperlinks. But if link has a description, count
+         ;; the words within the description.
+         ((looking-at org-bracket-link-analytic-regexp)
+          (when (match-string-no-properties 5)
+            (let ((desc (match-string-no-properties 5)))
+              (save-match-data
+                (incf wc (length (remove "" (org-split-string
+                                             desc "\\W")))))))
+          (goto-char (match-end 0)))
+         ((looking-at org-any-link-re)
+          (goto-char (match-end 0)))
+         ;; Ignore inline source blocks, counting them as 1 word.
+         ((save-excursion
+            (backward-char)
+            (looking-at org-babel-inline-src-block-regexp))
+          (goto-char (match-end 0))
+          (setf wc (+ 2 wc)))
+         ;; Count latex macros as 1 word, ignoring their arguments.
+         ((save-excursion
+            (backward-char)
+            (looking-at latex-macro-regexp))
+          (goto-char (if count-latex-macro-args?
+                         (match-beginning 2)
+                       (match-end 0)))
+          (setf wc (+ 2 wc)))
+         ;; Ignore footnotes.
+         ((and (not count-footnotes?)
+               (or (org-footnote-at-definition-p)
+                   (org-footnote-at-reference-p)))
+          nil)
+         (t
+          (let ((contexts (org-context)))
+            (cond
+             ;; Ignore tags and TODO keywords, etc.
+             ((or (assoc :todo-keyword contexts)
+                  (assoc :priority contexts)
+                  (assoc :keyword contexts)
+                  (assoc :checkbox contexts))
+              nil)
+             ;; Ignore sections marked with tags that are
+             ;; excluded from export.
+             ((assoc :tags contexts)
+              (if (intersection (org-get-tags-at) org-export-exclude-tags
+                                :test 'equal)
+                  (org-forward-same-level 1)
+                nil))
+             (t
+              (incf wc))))))
+        (re-search-forward "\\w+\\W*")))
+    (message (format "%d words in %s." wc
+                     (if mark-active "region" "buffer")))))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (local-set-key "\C-c," 'org-word-count)))
+
+(defun get-string-from-file (filePath)
+  "Return filePath's file content."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (buffer-string)))
+
+(defun merge-links (new-file)
+(interactive (list (read-file-name "Output filename:")) )
+(when (eq major-mode 'org-mode)
+(goto-char (point-min))
+(while (re-search-forward org-bracket-link-analytic-regexp nil t)
+(let ( (link-type (match-string 2)) (path (match-string 3)) )
+  (if (string= link-type "file") (append-to-file (get-string-from-file path) nil new-file) )
+))
+(find-file new-file)
+))
+
+;; for puppet
+(require 'align)
+
+;; IRC
+(require 'erc)
+
+;; fringe mode
+;; A small minor mode to use a big fringe
+(defvar bzg-big-fringe-mode nil)
+(define-minor-mode bzg-big-fringe-mode
+  "Minor mode to use big fringe in the current buffer."
+  :init-value nil
+  :global t
+  :variable bzg-big-fringe-mode
+  :group 'editing-basics
+  (if (not bzg-big-fringe-mode)
+      (set-fringe-style nil)
+    (set-fringe-mode
+     (/ (- (frame-pixel-width)
+           (* 100 (frame-char-width)))
+        2))))
+
+;; Now activate this global minor mode
+;; (bzg-big-fringe-mode 1)
+
+;; To activate the fringe by default and deactivate it when windows
+;; are split vertically, uncomment this:
+;; (add-hook 'window-configuration-change-hook
+;;           (lambda ()
+;;             (if (delq nil
+;;                       (let ((fw (frame-width)))
+;;                         (mapcar (lambda(w) (< (window-width w) fw))
+;;                                 (window-list))))
+;;                 (bzg-big-fringe-mode 0)
+;;               (bzg-big-fringe-mode 1))))
+
+;; Use a minimal cursor
+;; (setq default-cursor-type 'hbar)
+
+;; Get rid of the indicators in the fringe
+;; (mapcar (lambda(fb) (set-fringe-bitmap-face fb 'org-hide))
+;;         fringe-bitmaps)
+
 ;; yaml
 (require 'yaml-mode)
     (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; open plan file
+(set-register ?p (cons 'file "~/plan.org"))
