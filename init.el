@@ -90,10 +90,10 @@
 (global-set-key [(shift f10)] 'cycle-buffer-permissive)
 
 
-;; haskell
-(load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+;; ;; haskell
+;; (load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 
 (global-set-key "\M-q" 'ido-kill-buffer)
@@ -291,9 +291,9 @@
 
 ;; marmalade
 (require 'package)
-(add-to-list 'package-archives
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
 ;; emmet mode
@@ -321,11 +321,12 @@
     (insert "<" tagName ">")
     ))
 
-;; solarized theme
-;; (load-theme 'solarized-dark t)
+(setq calendar-location-name "Chennai, India")
+(setq calendar-latitude 12.99)
+(setq calendar-longitude 80.2)
 
-;; zenburn theme
-(load-theme 'zenburn t)
+(require 'theme-changer)
+(change-theme 'zenburn 'light-soap)
 
 ;; naked emacs setup
 ;; Prevent the cursor from blinking
@@ -355,4 +356,19 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (set-default-font "Droid Sans Mono-12")
->>>>>>> c744cf959eae288f1090479c666fe3e573e69b87
+
+;; yaml
+(require 'yaml-mode)
+    (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
