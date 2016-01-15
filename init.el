@@ -3,6 +3,11 @@
 
 ; some GUI cleanups
 (require 'ido)
+(setq
+ ido-create-new-buffer    'always
+ ido-enable-flex-matching t
+ ido-everywhere           t)
+
 (ido-mode t)
 (menu-bar-mode -1)
 
@@ -140,18 +145,18 @@
      (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name)))
   )
 
-(require 'auto-complete)
-(global-auto-complete-mode t)
+;; 
+;; (global-auto-complete-mode t)
 
-(define-key ac-complete-mode-map "\C-n" 'ac-next)
-(define-key ac-complete-mode-map "\C-p" 'ac-previous)
+;; (define-key ac-complete-mode-map "\C-n" 'ac-next)
+;; (define-key ac-complete-mode-map "\C-p" 'ac-previous)
 
-(setq ac-auto-start nil)
-(global-set-key "\M-/" 'ac-start)
-(define-key ac-complete-mode-map "\M-/" 'ac-stop)
+;; (setq ac-auto-start nil)
+;; (global-set-key "\M-/" 'ac-start)
+;; (define-key ac-complete-mode-map "\M-/" 'ac-stop)
 
-(define-key ac-complete-mode-map "\t" 'ac-complete)
-(define-key ac-complete-mode-map "\r" nil)
+;; (define-key ac-complete-mode-map "\t" 'ac-complete)
+;; (define-key ac-complete-mode-map "\r" nil)
 
 (load-file "~/.emacs.d/find-file-in-tags.el")
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
@@ -291,48 +296,28 @@
 
 ;; marmalade
 (require 'package)
+;; (add-to-list 'package-archives
+;;     '("marmalade" .
+;;       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
+             '("melpa" . "http://melpa.org/packages/") t)
+
 (package-initialize)
 
 ;; emmet mode
-(require 'emmet-mode)
-
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-
-(defun wrap-html-tag (tagName)
-  "Add a tag to beginning and ending of current word or text selection."
-  (interactive "sEnter tag name: ")
-  (let (p1 p2 inputText)
-    (if (use-region-p)
-        (progn
-          (setq p1 (region-beginning) )
-          (setq p2 (region-end) )
-          )
-      (let ((bds (bounds-of-thing-at-point 'symbol)))
-        (setq p1 (car bds) )
-        (setq p2 (cdr bds) ) ) )
-
-    (goto-char p2)
-    (insert "</" tagName ">")
-    (goto-char p1)
-    (insert "<" tagName ">")
-    ))
 
 ;; solarized theme
-;; (load-theme 'solarized-dark t)
+(load-theme 'birds-of-paradise-plus t)
 
 ;; zenburn theme
-(load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
 
 (setq calendar-location-name "Chennai, India") 
 (setq calendar-latitude 12.99)
 (setq calendar-longitude 80.2)
 
-(require 'theme-changer)
-(change-theme 'solarized-light 'zenburn)
+;; (require 'theme-changer)
+;; (change-theme 'solarized-light 'zenburn)
 
 ;; naked emacs setup
 ;; Prevent the cursor from blinking
@@ -537,7 +522,7 @@ of its arguments."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(custom-safe-themes (quote ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
+ '(custom-safe-themes (quote ("c4e6fe8f5728a5d5fd0e92538f68c3b4e8b218bcfb5e07d8afff8731cc5f3df0" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
  '(fci-rule-color "#383838")
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
@@ -549,4 +534,97 @@ of its arguments."
  ;; If there is more than one, they won't work right.
  )
 ;; open plan file
-(set-register ?p (cons 'file "~/plan.org"))
+(set-register ?p (cons 'file "~/Dropbox/plan.org"))
+
+;; open d8 file
+(set-register ?d (cons 'file "~/Dropbox/drupal/d8.org"))
+
+;; open todo file
+(set-register ?t (cons 'file "~/Dropbox/drupal/todo.org"))
+
+;; open haskell cookbook file
+(set-register ?h (cons 'file "~/Dropbox/haskell/haskell-cookbook.org"))
+
+;; open haskell cookbook file
+(set-register ?u (cons 'file "~/Dropbox/paas/tsuru.txt"))
+
+;; open scriber
+(set-register ?s (cons 'file "~/Dropbox/scriber/scriber.org"))
+
+;; manage blog posts
+(set-register ?b (cons 'file "~/Dropbox/blog-posts/blogs.org"))
+
+;; org reveal
+(require 'ox-reveal)
+
+;; org markdown
+(require 'ox-md)
+
+;; org evernote
+(load-file "~/.emacs.d/evernote-mode/evernote-mode.el")
+(setq evernote-ruby-command "/home/lakshmi/.rvm/rubies/ruby-2.1.2/bin/ruby")
+(require 'evernote-mode)
+
+
+;; new scratch buffer
+(defun new-scratch ()
+  "open up a guaranteed new scratch buffer"
+  (interactive)
+  (switch-to-buffer (loop for num from 0
+                          for name = (format "blah-%03i" num)
+                          while (get-buffer name)
+                          finally return name)))
+
+;; 80 lines
+(require 'whitespace)
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face lines-tail))
+
+;; (add-hook 'prog-mode-hook 'whitespace-mode)
+
+;; helm
+(require 'helm-config)
+
+;; org-trello
+(require 'org-trello)
+
+;; org add source block
+;; source: http://wenshanren.org/?p=334
+(defun org-insert-src-block (src-code-type)
+  "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+  (interactive
+   (let ((src-code-types
+          '("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"
+            "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
+            "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
+            "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
+            "scheme" "sqlite")))
+     (list (ido-completing-read "Source code type: " src-code-types))))
+  (progn
+    (newline-and-indent)
+    (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+    (newline-and-indent)
+    (insert "#+END_SRC\n")
+    (previous-line 2)
+    (org-edit-src-code)))
+
+;; elm-mode
+;; (require 'elm-mode)
+
+(defun point-in-comment ()
+  (let ((syn (syntax-ppss)))
+    (and (nth 8 syn)
+         (not (nth 3 syn)))))
+
+(defun my-capitalize-all-pg-keywords ()
+  (interactive)
+  (require 'sql)
+  (save-excursion
+    (dolist (keywords sql-mode-postgres-font-lock-keywords) 
+      (goto-char (point-min))
+      (while (re-search-forward (car keywords) nil t)
+        (unless (point-in-comment)
+          (goto-char (match-beginning 0))
+          (upcase-word 1))))))
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
