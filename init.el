@@ -95,10 +95,10 @@
 (global-set-key [(shift f10)] 'cycle-buffer-permissive)
 
 
-;; haskell
-(load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+;; ;; haskell
+;; (load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 
 (global-set-key "\M-q" 'ido-kill-buffer)
@@ -296,12 +296,10 @@
 
 ;; marmalade
 (require 'package)
-;; (add-to-list 'package-archives
-;;     '("marmalade" .
-;;       "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
 
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
 ;; emmet mode
@@ -311,6 +309,7 @@
 
 ;; zenburn theme
 ;; (load-theme 'zenburn t)
+
 
 (setq calendar-location-name "Chennai, India") 
 (setq calendar-latitude 12.99)
@@ -516,23 +515,7 @@ of its arguments."
 ;; yaml
 (require 'yaml-mode)
     (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(custom-safe-themes (quote ("c4e6fe8f5728a5d5fd0e92538f68c3b4e8b218bcfb5e07d8afff8731cc5f3df0" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
- '(fci-rule-color "#383838")
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 ;; open plan file
 (set-register ?p (cons 'file "~/Dropbox/plan.org"))
 
