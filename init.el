@@ -537,11 +537,15 @@ of its arguments."
 ;; manage blog posts
 (set-register ?b (cons 'file "~/Dropbox/blog-posts/blogs.org"))
 
+
 ;; org reveal
 (require 'ox-reveal)
 
-;; org markdown
-(require 'ox-md)
+;; org leanpub
+(require 'ox-leanpub)
+
+;; org github
+(require 'ox-gfm)
 
 ;; org evernote
 (load-file "~/.emacs.d/evernote-mode/evernote-mode.el")
@@ -592,7 +596,10 @@ of its arguments."
     (org-edit-src-code)))
 
 ;; elm-mode
-;; (require 'elm-mode)
+(add-to-list 'load-path "~/.emacs.d/elm-mode")
+(require 'elm-mode)
+(setq elm-compile-command "/home/lakshmi/npm-global/bin/elm-make")
+(setq elm-compile-arguments '("--yes" "--warn"))
 
 (defun point-in-comment ()
   (let ((syn (syntax-ppss)))
@@ -611,3 +618,6 @@ of its arguments."
           (upcase-word 1))))))
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
+(autoload 'jsx-mode "jsx-mode" "JSX mode" t)
