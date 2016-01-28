@@ -515,6 +515,9 @@ of its arguments."
 ;; yaml
 (require 'yaml-mode)
     (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;; .raml files also use YAML mode.
+(add-to-list 'auto-mode-alist '("\\.raml\\'" . yaml-mode))
+
 
 ;; open plan file
 (set-register ?p (cons 'file "~/Dropbox/plan.org"))
