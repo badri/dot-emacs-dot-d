@@ -22,7 +22,7 @@
 ;;(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 ;;(load-library "js2")
 
-(load-file "~/.emacs.d/cedet-1.1/common/cedet.el")
+;; (load-file "~/.emacs.d/cedet-1.1/common/cedet.el")
 
 (require 'pager)
 
@@ -96,9 +96,9 @@
 
 
 ;; ;; haskell
-;; (load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+(load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 
 (global-set-key "\M-q" 'ido-kill-buffer)
@@ -624,3 +624,53 @@ of its arguments."
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 (autoload 'jsx-mode "jsx-mode" "JSX mode" t)
+
+(setq dired-dwim-target t)
+
+
+(add-hook 'sql-mode-hook
+          (lambda ()
+            (sql-highlight-postgres-keywords)))
+
+;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+(setq utf-translate-cjk-mode nil)
+
+(set-language-environment 'utf-8)
+(setq locale-coding-system 'utf-8)
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(setq org-ellipsis "⤵")
+(setq org-src-fontify-natively t)
+
+
+(defun org-export-all (backend)
+  "Export all subtrees that are *not* tagged with :noexport: to
+separate files.
+
+Note that subtrees must have the :EXPORT_FILE_NAME: property set
+to a unique value for this to work properly."
+  (interactive "sEnter backend: ")
+  (let ((fn (cond ((equal backend "html") 'org-html-export-to-html)
+                  ((equal backend "leanpub") 'org-leanpub-export-to-markdown)
+                  ((equal backend "pdf") 'org-latex-export-to-pdf))))
+    (save-excursion
+      (set-mark (point-min))
+      (goto-char (point-max))
+      (org-map-entries (lambda () (funcall fn nil t)) "-noexport" 'region-start-level))))
+
+
+
+
+(defun my-exp-headings-to-markdown ()
+  "Export each top-level heading to markdown."
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (let ((level (nth 1 (org-heading-components)))
+           (title (nth 4 (org-heading-components))))
+       (when (= level 1) 
+         ;;(org-entry-put (point) "EXPORT_FILE_NAME" title)
+         (org-md-export-to-markdown nil 1 nil)))) "-noexport" )
+   nil nil)
+
