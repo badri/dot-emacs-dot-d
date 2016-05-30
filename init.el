@@ -161,9 +161,9 @@
 (load-file "~/.emacs.d/find-file-in-tags.el")
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 
-(setq drupal-ide-load-path (concat user-emacs-directory "drupal/drupal-init.el"))
-(autoload 'drupal-ide drupal-ide-load-path "Start IDE for PHP & Drupal development" t)
-(load (concat user-emacs-directory "drupal/drupal-init.el"))
+;; (setq drupal-ide-load-path (concat user-emacs-directory "drupal/drupal-init.el"))
+;; (autoload 'drupal-ide drupal-ide-load-path "Start IDE for PHP & Drupal development" t)
+;; (load (concat user-emacs-directory "drupal/drupal-init.el"))
 
 (defun django-shell (&optional argprompt)
   (interactive "P")
@@ -662,15 +662,28 @@ to a unique value for this to work properly."
 
 
 
-(defun my-exp-headings-to-markdown ()
-  "Export each top-level heading to markdown."
+(defun lp-export ()
+  "Export buffer to a lenpub book."
   (interactive)
+  (if (file-exists-p "./Book.txt")
+  (delete-file "./Book.txt"))
   (org-map-entries
    (lambda ()
      (let ((level (nth 1 (org-heading-components)))
-           (title (nth 4 (org-heading-components))))
-       (when (= level 1) 
+	   (filename (or (org-entry-get (point) "EXPORT_FILE_NAME") nil))
+           (title (or (nth 4 (org-heading-components)))))
+       (when (= level 1)
+         (append-to-file (concat filename "\n") nil "./Book.txt")
+	 ;; set filename only if the property is missing
          ;;(org-entry-put (point) "EXPORT_FILE_NAME" title)
-         (org-md-export-to-markdown nil 1 nil)))) "-noexport" )
+         (org-leanpub-export-to-markdown nil 1 nil)))) "-noexport")
    nil nil)
 
+;;  (shell-command (format "sed -i '1s/^/%s\n/' %s" filename filename))
+
+(add-to-list 'load-path "~/.emacs.d/restclient.el")
+(require 'restclient)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((restclient . t)))
