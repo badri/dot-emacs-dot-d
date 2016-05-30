@@ -669,14 +669,15 @@ to a unique value for this to work properly."
   (delete-file "./Book.txt"))
   (org-map-entries
    (lambda ()
-     (let ((level (nth 1 (org-heading-components)))
-	   (filename (or (org-entry-get (point) "EXPORT_FILE_NAME") nil))
-           (title (or (nth 4 (org-heading-components)))))
+     (let* ((level (nth 1 (org-heading-components)))
+           (title (or (nth 4 (org-heading-components)) ""))
+           (filename
+	    (or (org-entry-get (point) "EXPORT_FILE_NAME") (concat (replace-regexp-in-string " " "-" (downcase title)) ".md"))))
        (when (= level 1)
          (append-to-file (concat filename "\n") nil "./Book.txt")
 	 ;; set filename only if the property is missing
-         ;;(org-entry-put (point) "EXPORT_FILE_NAME" title)
-         (org-leanpub-export-to-markdown nil 1 nil)))) "-noexport")
+         (or (org-entry-get (point) "EXPORT_FILE_NAME")  (org-entry-put (point) "EXPORT_FILE_NAME" filename))
+         (org-leanpub-export-to-markdown nil 1 nil)))) "-noexport") (org-save-all-org-buffers)
    nil nil)
 
 ;;  (shell-command (format "sed -i '1s/^/%s\n/' %s" filename filename))
