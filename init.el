@@ -688,3 +688,37 @@ to a unique value for this to work properly."
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((restclient . t)))
+
+(setq org-agenda-files
+      (delq nil
+            (mapcar (lambda (x) (and (file-exists-p x) x))
+                    '("~/Dropbox/org/ideas.org"
+                      "~/Dropbox/org/habit.org"
+                      "~/Dropbox/org/office.org"
+                      "~/Dropbox/org/capture.org"
+                      "~/Dropbox/org/blog/blogs.org"
+                      "~/Dropbox/org/projects/cloudifice.org"
+                      "~/Dropbox/org/projects/trext.org"
+                      "~/Dropbox/drupal/d8.org"
+                      "~/Dropbox/org/projects/drupalthemery.org"
+                      "~/Dropbox/org/websites.org"))))
+(setq org-agenda-span 2)
+(setq org-agenda-tags-column -100) ; take advantage of the screen width
+(setq org-agenda-sticky nil)
+(setq org-agenda-inhibit-startup t)
+(setq org-agenda-use-tag-inheritance t)
+(setq org-agenda-show-log t)
+(setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
+(setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
+(setq org-agenda-time-grid
+      '((daily today require-timed)
+       "----------------"
+       (800 1000 1200 1400 1600 1800)))
+(setq org-columns-default-format "%14SCHEDULED %Effort{:} %1PRIORITY %TODO %50ITEM %TAGS")
+
+(global-set-key (kbd "C-c c") 'org-capture)
+(setq org-default-notes-file "~/Dropbox/org/capture.org")
+
+(add-hook 'org-mode-hook
+          (lambda () (setq-local make-backup-files nil)))
