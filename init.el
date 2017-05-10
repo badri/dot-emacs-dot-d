@@ -1,4 +1,3 @@
-
 (add-to-list 'load-path "~/.emacs.d")
 
 ; some GUI cleanups
@@ -96,9 +95,9 @@
 
 
 ;; ;; haskell
-(load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+;;(load "~/.emacs.d/haskell-mode-2.4/haskell-site-file")
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
 
 (global-set-key "\M-q" 'ido-kill-buffer)
@@ -205,9 +204,8 @@
   (use-local-map py-shell-map)
   (run-hooks 'py-shell-hook))))
 
-;; cucumber mode
-(add-to-list 'load-path "~/.emacs.d/cucumber.el")
-;;(require 'feature-mode)
+;; feature mode
+;; (require 'feature-mode)
 ;; (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
 
 ;; markdown
@@ -257,15 +255,15 @@
 
 
 ;; drupal yasnippet mode
-(load-file "~/.emacs.d/yasnippet/yasnippet.el")
-(require 'yasnippet)
+;; (load-file "~/.emacs.d/yasnippet/yasnippet.el")
+;; (require 'yasnippet)
 
-(setq yas-snippet-dirs
-      '("~/.emacs.d/drupal-yasnippet"            ;; drupal snippets
-	"~/.emacs.d/cucumber.el/snippets"
-        ))
+;; (setq yas-snippet-dirs
+;;       '("~/.emacs.d/drupal-yasnippet"            ;; drupal snippets
+;; 	"~/.emacs.d/cucumber.el/snippets"
+;;         ))
 
-(yas-global-mode 1)
+;; (yas-global-mode 1)
 
 ;; magit
 (add-to-list 'load-path "~/.emacs.d/git-modes")
@@ -301,6 +299,7 @@
                          ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
+;; NOTE if package install fails run M-x package-refresh-contents
 
 ;; emmet mode
 
@@ -345,7 +344,9 @@
 (scroll-bar-mode 0)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(set-default-font "Droid Sans Mono-12")
+;;(set-default-font "Droid Sans Mono-12")
+;;(set-default-font "Menlo for Powerline-16")
+(set-default-font "Space Mono-16")
 
 ;; org mode hacks
  (setq org-todo-keywords
@@ -550,6 +551,10 @@ of its arguments."
 ;; org github
 (require 'ox-gfm)
 
+;; org twitter bootstrap
+(require 'ox-twbs)
+
+
 ;; org evernote
 (load-file "~/.emacs.d/evernote-mode/evernote-mode.el")
 (setq evernote-ruby-command "/home/lakshmi/.rvm/rubies/ruby-2.1.2/bin/ruby")
@@ -640,41 +645,30 @@ of its arguments."
 
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(setq org-ellipsis "⤵")
+(setq org-ellipsis " ☰")
 (setq org-src-fontify-natively t)
 
 
-(defun org-export-all (backend)
-  "Export all subtrees that are *not* tagged with :noexport: to
-separate files.
-
-Note that subtrees must have the :EXPORT_FILE_NAME: property set
-to a unique value for this to work properly."
-  (interactive "sEnter backend: ")
-  (let ((fn (cond ((equal backend "html") 'org-html-export-to-html)
-                  ((equal backend "leanpub") 'org-leanpub-export-to-markdown)
-                  ((equal backend "pdf") 'org-latex-export-to-pdf))))
-    (save-excursion
-      (set-mark (point-min))
-      (goto-char (point-max))
-      (org-map-entries (lambda () (funcall fn nil t)) "-noexport" 'region-start-level))))
-
-
-
-
 (defun lp-export ()
-  "Export buffer to a lenpub book."
+  "Export buffer to a Leanpub book."
   (interactive)
   (if (file-exists-p "./Book.txt")
   (delete-file "./Book.txt"))
+  (if (file-exists-p "./Sample.txt")
+  (delete-file "./Sample.txt"))
   (org-map-entries
    (lambda ()
      (let* ((level (nth 1 (org-heading-components)))
+	    (tags (org-get-tags))
            (title (or (nth 4 (org-heading-components)) ""))
+	   (book-slug (org-entry-get (point) "TITLE"))
            (filename
 	    (or (org-entry-get (point) "EXPORT_FILE_NAME") (concat (replace-regexp-in-string " " "-" (downcase title)) ".md"))))
        (when (= level 1)
-         (append-to-file (concat filename "\n") nil "./Book.txt")
+	 ;; add to Sample book if "sample" tag is found.
+	 (when (or (member "sample" tags) (string-prefix-p "frontmatter" filename) (string-prefix-p "mainmatter" filename))
+	   (append-to-file (concat filename "\n\n") nil "./Sample.txt"))
+         (append-to-file (concat filename "\n\n") nil "./Book.txt")
 	 ;; set filename only if the property is missing
          (or (org-entry-get (point) "EXPORT_FILE_NAME")  (org-entry-put (point) "EXPORT_FILE_NAME" filename))
          (org-leanpub-export-to-markdown nil 1 nil)))) "-noexport") (org-save-all-org-buffers)
@@ -692,16 +686,20 @@ to a unique value for this to work properly."
 (setq org-agenda-files
       (delq nil
             (mapcar (lambda (x) (and (file-exists-p x) x))
-                    '("~/Dropbox/org/ideas.org"
-                      "~/Dropbox/org/habit.org"
-                      "~/Dropbox/org/office.org"
-                      "~/Dropbox/org/capture.org"
-                      "~/Dropbox/org/blog/blogs.org"
-                      "~/Dropbox/org/projects/cloudifice.org"
-                      "~/Dropbox/org/projects/trext.org"
-                      "~/Dropbox/drupal/d8.org"
-                      "~/Dropbox/org/projects/drupalthemery.org"
-                      "~/Dropbox/org/websites.org"))))
+                    (append '("~/org/ideas.org"
+                      "~/org/habit.org"
+                      ;;"~/org/office.org"
+                      "~/org/capture.org"
+                      "~/org/learn.org"
+                      "~/org/blog/blogs.org"
+                      "~/org/personal.org"
+                      "~/org/mkting.org"
+                      "~/org/cp.org"
+                      "~/org/todo.org"
+                      ;;"~/Dropbox/drupal/d8.org"
+                      "~/d8book/easybook/doc/drupal-8-module-development/Contents/nd8.org"
+                      ;;"~/org/websites.org"
+		      ) (file-expand-wildcards "~/org/projects/*.org")))))
 (setq org-agenda-span 2)
 (setq org-agenda-tags-column -100) ; take advantage of the screen width
 (setq org-agenda-sticky nil)
@@ -722,3 +720,162 @@ to a unique value for this to work properly."
 
 (add-hook 'org-mode-hook
           (lambda () (setq-local make-backup-files nil)))
+(org-agenda-list)
+
+(defun org-make-list (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert "- ")
+      (forward-line))
+    (beginning-of-line)))
+
+(defun org-make-olist (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert (concat (number-to-string (1+ i)) ". "))
+      (forward-line))
+    (beginning-of-line)))
+
+(defun org-make-checkbox (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert "- [ ] ")
+      (forward-line))
+    (beginning-of-line)))
+
+(require 'request)
+
+(defun lp-preview ()
+  "Generate a preview of your book @ Leanpub."
+  (interactive)
+  (request
+   "https://leanpub.com/drupal8book/preview.json"
+   :type "POST"
+   :data '(("api_key" . "mZ-X3orkm9zpNizYOEFnHw"))
+   :parser 'json-read
+   :success (function*
+	     (lambda (&key data &allow-other-keys)
+	       (message "Preview generation queued at leanpub.com."))))
+  )
+
+(add-to-list 'load-path "~/.emacs.d/tomatinho")
+(require 'tomatinho)
+(global-set-key (kbd "<f12>") 'tomatinho)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(org-trello-current-prefix-keybinding "C-c o" nil (org-trello))
+ '(package-selected-packages
+   (quote
+    (neotree org-trello zenburn-theme yaml-mode workgroups2 workgroups theme-changer puppet-mode powerline org-bullets org htmlize helm go-mode feature-mode emmet-mode elm-mode drupal-mode dockerfile-mode color-theme-solarized birds-of-paradise-plus-theme auto-complete)))
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(require 'powerline)
+(powerline-default-theme)
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(defun find-overlays-specifying (prop pos)
+  (let ((overlays (overlays-at pos))
+        found)
+    (while overlays
+      (let ((overlay (car overlays)))
+        (if (overlay-get overlay prop)
+            (setq found (cons overlay found))))
+      (setq overlays (cdr overlays)))
+    found))
+
+(defun highlight-or-dehighlight-line ()
+  (interactive)
+  (if (find-overlays-specifying
+       'line-highlight-overlay-marker
+       (line-beginning-position))
+      (remove-overlays (line-beginning-position) (+ 1 (line-end-position)))
+    (let ((overlay-highlight (make-overlay
+                              (line-beginning-position)
+                              (+ 1 (line-end-position)))))
+        (overlay-put overlay-highlight 'face '(:background "#2e8b57"))
+        (overlay-put overlay-highlight 'line-highlight-overlay-marker t))))
+
+
+(global-set-key [f8] 'highlight-or-dehighlight-line)
+
+(defun remove-all-highlight ()
+  (interactive)
+  (remove-overlays (point-min) (point-max))
+  )
+
+(global-set-key [f9] 'remove-all-highlight)
+
+(add-to-list 'load-path "~/.emacs.d/neotree")
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+(setq tramp-default-method "ssh")
+
+     (setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/ideas.org" "Idea")
+             "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/mkting.org")
+	 "* %?\nEntered on %U\n  %i\n  %a")
+        ("b" "Blog post" entry (file "~/org/blog/blogs.org")
+	 (file "~/org/tpl-blog.txt") :empty-lines-before 1)
+      ("c" "Class" entry (file "~/org/blog/blogs.org")
+      "* TODO %^{Course}: Week %^{Week} Lecture %^{Number}\n SCHEDULED: %^{Sched}T\n ** TODO prepare for %\\1-%\\2-%\\3")
+      ))
+
+(setq debug-on-error t)

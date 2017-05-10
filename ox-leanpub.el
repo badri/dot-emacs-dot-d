@@ -124,8 +124,7 @@ definitions at the end."
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let ((lang (org-element-property :language src-block)))
-    (format "{lang=\"%s\"}\n~~~~~~~~\n%s~~~~~~~~"
-            lang
+    (format "~~~~~~~~\n%s~~~~~~~~"
             (org-remove-indentation
              (org-element-property :value src-block)))))
 
@@ -139,7 +138,7 @@ CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (replace-regexp-in-string
    "^" "A> "
-   (format "{linenos=off}\n~~~~~~~~\n%s~~~~~~~~"
+   (format "%s"
            (org-remove-indentation
             (org-element-property :value src-block)))))
 
