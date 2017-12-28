@@ -1,0 +1,100 @@
+#+TITLE: Lakshmi Narasimhan's Emacs configuration
+#+OPTIONS: toc:4 h:4
+#+STARTUP: showeverything
+
+
+* Configuration
+
+** Starting up
+
+Boot emacs with a clean/minimal interface.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(when t ;window-system
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tooltip-mode -1))
+
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
+#+END_SRC
+
+Start on full screen.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+#+END_SRC
+
+
+** Personal information
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq user-full-name "Lakshmi Narasimhan"
+      user-mail-address "lakshmi@lakshminp.com")
+#+END_SRC
+
+** Emacs configuration
+
+*** Packages
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(package-initialize)
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
+(unless (assoc-default "org" package-archives)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t))
+#+END_SRC
+
+Use =M-x package-refresh-contents= to reload the list of packages
+after adding these for the first time.
+
+
+Install =use-package= package for other packages. If you like the configuration, do an =install-package=.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+#+END_SRC
+
+
+*** Theme/Look and feel
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(load-theme 'birds-of-paradise-plus t)
+#+END_SRC
+
+font.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(set-default-font "Space Mono-20")
+#+END_SRC
+
+Powerline.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+#+END_SRC
+
+*** Basic settings
+
+Enable CUA mode.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(cua-mode t)
+#+END_SRC
+
+Simple shortcuts.
+
+Use package.
+
+Unset C-z.
+
+** Org mode specifics
