@@ -3,3 +3,6 @@
 auto-save-list/
 elpa/
 init.el
+lakshminp.el
+org-clock-save.el
+

@@ -1,5 +1,6 @@
 #+TITLE: Lakshmi Narasimhan's Emacs configuration
 #+OPTIONS: toc:4 h:4
+#+STARTUP: indent
 #+STARTUP: showeverything
 
 
@@ -27,6 +28,31 @@ Start on full screen.
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 #+END_SRC
 
+Custom variables which get added every time.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(initial-frame-alist (quote ((fullscreen . maximized))))
+ '(package-selected-packages
+   (quote
+    (dired+ org-bullets dired-subtree dired dockerfile-mode json-mode tide js2-mode yaml-mode web-mode use-package smart-mode-line-powerline-theme scss-mode php-mode markdown-mode birds-of-paradise-plus-theme auto-compile))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+#+END_SRC
+
 
 ** Personal information
 
@@ -35,16 +61,16 @@ Start on full screen.
       user-mail-address "lakshmi@lakshminp.com")
 #+END_SRC
 
+
 ** Emacs configuration
 
 *** Packages
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(unless (assoc-default "melpa" package-archives)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
-(unless (assoc-default "org" package-archives)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t))
 #+END_SRC
 
 Use =M-x package-refresh-contents= to reload the list of packages
@@ -74,14 +100,18 @@ Install =use-package= package for other packages. If you like the configuration,
 font.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(set-default-font "Space Mono-20")
+(set-default-font "Ubuntu Mono-20")
 #+END_SRC
 
 Powerline.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package smart-mode-line)
+(use-package smart-mode-line-powerline-theme)
+(sml/setup)
 
 #+END_SRC
+
 
 *** Basic settings
 
@@ -93,8 +123,288 @@ Enable CUA mode.
 
 Simple shortcuts.
 
-Use package.
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ln 'linum)
+(defalias 'cr 'comment-region)
+(defalias 'ur 'uncomment-region)
+(defalias 'ir 'indent-region)
+(defalias 'gl 'goto-line)
+#+END_SRC
 
 Unset C-z.
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+(global-unset-key  (kbd "C-f"))
+(global-unset-key  (kbd "C-b"))
+(global-unset-key  (kbd "C-n"))
+(global-unset-key (kbd "C-z"))
+#+END_SRC
+
+
+Backward kill word.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(global-set-key "\C-w" 'backward-kill-word)
+#+END_SRC
+
+Set register for configuring init file.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(set-register ?i '(file . "~/.emacs.d/lakshminp.org"))
+#+END_SRC
+
+
+** Language specific settings
+
+*** PHP
+
+PHP mode toggling for Drupal 7/8 files.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package php-mode
+  :ensure t
+  :mode (("\\.php\\'" . php-mode)
+         ("\\.inc\\'"       . php-mode)
+         ("\\.install\\'"       . php-mode)
+         ("\\.module\\'"       . php-mode)
+         ("\\.profile\\'"       . php-mode)
+         ("\\.test\\'"       . php-mode)
+         ("\\.theme\\'"       . php-mode))
+)
+#+END_SRC
+
+*** Markdown
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package markdown-mode
+  :ensure t
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.text\\'"       . markdown-mode)
+         ("\\.markdown\\'"       . markdown-mode))
+)
+#+END_SRC
+
+*** YAML
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package yaml-mode
+  :ensure t
+  :mode (("\\.yml\\'" . yaml-mode)
+         ("\\.yaml\\'"       . yaml-mode)
+         ("\\.raml\\'"       . yaml-mode))
+)
+#+END_SRC
+
+
+*** Web mode
+
+Use web mode for HTML, Django and Drupal templates.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package web-mode
+  :ensure t
+  :mode (("\\.tpl\\.php'" . web-mode)
+         ("\\.twig\\'"       . web-mode)
+         ("\\.html\\'"       . web-mode))
+)
+#+END_SRC
+
+*** Python
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package python
+  :mode ("\\.py'" . python-mode)
+  :init
+  (progn
+    (defalias 'python2-mode 'python-mode)
+    (defalias 'python3-mode 'python-mode)))
+#+END_SRC
+
+*** SASS
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package scss-mode
+  :ensure t
+  :mode "\\.scss'")
+#+END_SRC
+
+*** JS
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package js2-mode
+  :ensure t
+  :mode "\\.js\\'"
+  :interpreter "node")
+#+END_SRC
+
+*** TODO JSX
+
+*** TypeScript
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package tide
+  :ensure t
+  :mode ("\\.ts\\'" . typescript-mode)
+  :config
+  (add-hook 'typescript-mode-hook
+            (lambda ()
+              (tide-setup)
+              (add-hook 'before-save-hook 'tide-format-before-save nil t))
+            ))
+#+END_SRC
+
+*** JSON
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package json-mode
+  :mode "\\.json\\'"
+  :ensure t)
+#+END_SRC
+
+*** Golang
+
+Run gofmt on save.
+
+*** Elm
+
+*** Docker file
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'"
+  :ensure t)
+#+END_SRC
+
+*** Feature mode
+
+For Behat and Gherkin files.
+
+
+** Other tools
+
+Integration with other tools.
+
+*** Navigation
+
+For now using Ido.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+#+END_SRC
+
+
+*** TODO Dired
+
+*** TODO Yasnippet
+
+*** Git
+
+Magit integration.
+
+Show magit window in full screen.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package magit
+  :ensure t
+  :bind (("C-c C-g"   . magit-status)
+	 ("C-M-<" . vc-git-grep))
+  :demand t
+  :init
+  (setq magit-process-popup-time -1
+        magit-auto-revert-mode-lighter nil
+        magit-last-seen-setup-instructions "1.4.0"
+        magit-revert-buffers 'silent
+        magit-push-always-verify nil
+        vc-follow-symlinks t))
+
+(use-package magit-blame
+  :ensure magit
+  :bind (("C-c C-<" . magit-blame)))
+#+END_SRC
+
+*** TODO Helm
+
+*** TODO Projectile
+
+*** TODO Neotree
+
+*** TODO All the icons
+*** TODO emacs backup configuration
+
+
 ** Org mode specifics
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org
+  :ensure t
+  :mode ("\\.org\\'" . org-mode)
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)
+         ("C-c C-w" . org-refile)
+         ("C-c j" . org-clock-goto)
+         ("C-c C-x C-o" . org-clock-out))
+  :config
+  (progn
+    (setq org-directory "~/org")
+    (setq org-agenda-files
+      (delq nil
+            (mapcar (lambda (x) (and (file-exists-p x) x))
+                    (append '("~/org/ideas.org"
+                      "~/org/habit.org"
+                      ;;"~/org/office.org"
+                      "~/org/capture.org"
+                      "~/org/learn.org"
+                      "~/org/blog/blogs.org"
+                      "~/org/personal.org"
+                      "~/org/mkting.org"
+                      "~/org/cp.org"
+                      "~/org/todo.org"
+                      ;;"~/Dropbox/drupal/d8.org"
+                      "~/d8book/easybook/doc/drupal-8-module-development/Contents/nd8.org"
+                      ;;"~/org/websites.org"
+		      ) (file-expand-wildcards "~/org/projects/*.org")))))
+    (setq org-log-done 'time)
+    (setq org-src-fontify-natively t)
+    (setq org-use-speed-commands t)
+     (setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/ideas.org" "Idea")
+             "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/mkting.org")
+	 "* %?\nEntered on %U\n  %i\n  %a")
+        ("b" "Blog post" entry (file "~/org/blog/blogs.org")
+	 (file "~/org/tpl-blog.txt") :empty-lines-before 1)
+      ("c" "Class" entry (file "~/org/blog/blogs.org")
+      "* TODO %^{Course}: Week %^{Week} Lecture %^{Number}\n SCHEDULED: %^{Sched}T\n ** TODO prepare for %\\1-%\\2-%\\3")
+      ))
+    (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+    (setq org-agenda-custom-commands
+          '(("@" "Contexts"
+             ((tags-todo "@email"
+                         ((org-agenda-overriding-header "Emails")))
+              (tags-todo "@phone"
+                         ((org-agenda-overriding-header "Phone")))))))
+    (setq org-clock-persist t)
+    (org-clock-persistence-insinuate)
+    (setq org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))))
+#+END_SRC
+
+*** Org Bullets
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org-bullets
+  :ensure t
+  :commands (org-bullets-mode)
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :config
+  (progn
+   
+  ))
+#+END_SRC
+
+*** Leanpub integration
