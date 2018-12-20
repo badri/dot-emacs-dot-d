@@ -53,6 +53,12 @@ Custom variables which get added every time.
 
 #+END_SRC
 
+Enable visual line mode for all text modes.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun turn-on-visual-line-mode () (visual-line-mode 1))
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+#+END_SRC
 
 ** Personal information
 
@@ -94,22 +100,28 @@ Install =use-package= package for other packages. If you like the configuration,
 *** Theme/Look and feel
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(load-theme 'birds-of-paradise-plus t)
+;; (load-theme 'dracula t)
+;; (load-theme 'solarized-dark t)
+;; (load-theme 'birds-of-paradise-plus t)
+(load-theme 'monokai t)
 #+END_SRC
 
 font.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(set-default-font "Ubuntu Mono-20")
+;; (set-default-font "Ubuntu Mono-20")
+(set-default-font "Menlo for Powerline-18")
 #+END_SRC
 
 Powerline.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package smart-mode-line)
-(use-package smart-mode-line-powerline-theme)
-(sml/setup)
+; (use-package smart-mode-line)
+; (use-package smart-mode-line-powerline-theme)
+; (sml/setup)
 
+(use-package powerline)
+(powerline-default-theme)
 #+END_SRC
 
 
@@ -173,6 +185,32 @@ PHP mode toggling for Drupal 7/8 files.
          ("\\.test\\'"       . php-mode)
          ("\\.theme\\'"       . php-mode))
 )
+#+END_SRC
+
+Add drupal mode
+
+#+BEGIN_SRC emacs-lisp :tanble yes
+(defun drupal-mode ()
+  "Drupal php-mode."
+  (interactive)
+  (php-mode)
+  (message "Drupal mode activated.")
+  (set 'tab-width 2)
+  (set 'c-basic-offset 2)
+  (set 'indent-tabs-mode nil)
+  (c-set-offset 'case-label '+)
+  (c-set-offset 'arglist-intro '+) ; for FAPI arrays and DBTNG
+  (c-set-offset 'arglist-cont-nonempty 'c-lineup-math) ; for DBTNG fields and values
+  ; More Drupal-specific customizations here
+)
+
+(defun setup-php-drupal ()
+  ; Drupal
+  (add-to-list 'auto-mode-alist '("\\.\\(module\\|test\\|install\\|theme\\)$" . drupal-mode))
+  (add-to-list 'auto-mode-alist '("/drupal.*\\.\\(php\\|inc\\)$" . drupal-mode))
+)
+
+(setup-php-drupal)
 #+END_SRC
 
 *** Markdown
@@ -265,9 +303,15 @@ Use web mode for HTML, Django and Drupal templates.
 
 *** Golang
 
-Run gofmt on save.
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package go-mode
+  :mode "\\.go\\'"
+  :ensure t)
+#+END_SRC
 
-*** Elm
+**** TODO Run gofmt on save.
+
+*** TODO Elm
 
 *** Docker file
 
@@ -279,12 +323,38 @@ Run gofmt on save.
 
 *** Feature mode
 
-For Behat and Gherkin files.
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package feature-mode
+  :ensure t
+  :defer t
+  :mode (("\.feature$" . feature-mode)))
+#+END_SRC
+
+*** Terraform
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package terraform-mode
+  :mode ("\\.tf'" . terraform-mode)
+)
+#+END_SRC
 
 
 ** Other tools
 
 Integration with other tools.
+
+*** Silver searcher
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package ack
+  :ensure t
+  :config
+  (progn
+(setq ack-command
+                  (concat (cond ((executable-find "ag"))
+                                ((executable-find "ack-grep"))
+((executable-find "ack"))) " "))))
+#+END_SRC
 
 *** Navigation
 
@@ -326,9 +396,21 @@ Show magit window in full screen.
   :bind (("C-c C-<" . magit-blame)))
 #+END_SRC
 
-*** TODO Helm
-
 *** TODO Projectile
+
+#+BEGIN_SRC emacs-lisp :tangle yes 
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode))
+
+(use-package helm-projectile
+  :ensure t
+  :config
+  (helm-projectile-on))
+
+(provide 'projectile-settings)
+#+END_SRC
 
 *** TODO Neotree
 
@@ -351,13 +433,16 @@ Show magit window in full screen.
          ("C-c C-x C-o" . org-clock-out))
   :config
   (progn
+(add-to-list 'org-modules 'org-habit)
     (setq org-directory "~/org")
     (setq org-agenda-files
       (delq nil
             (mapcar (lambda (x) (and (file-exists-p x) x))
                     (append '("~/org/ideas.org"
                       "~/org/habit.org"
-                      ;;"~/org/office.org"
+                      "~/org/mani.org"
+                      "~/org/office.org"
+                      "~/org/followups.org"
                       "~/org/capture.org"
                       "~/org/learn.org"
                       "~/org/blog/blogs.org"
@@ -392,6 +477,13 @@ Show magit window in full screen.
     (setq org-clock-persist t)
     (org-clock-persistence-insinuate)
     (setq org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))))
+#+END_SRC
+
+*** Org export
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+ (eval-after-load "org"
+    '(require 'ox-md nil t))
 #+END_SRC
 
 *** Org Bullets
