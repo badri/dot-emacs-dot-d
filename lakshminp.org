@@ -100,16 +100,12 @@ Install =use-package= package for other packages. If you like the configuration,
 *** Theme/Look and feel
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (load-theme 'dracula t)
-;; (load-theme 'solarized-dark t)
-;; (load-theme 'birds-of-paradise-plus t)
 (load-theme 'monokai t)
 #+END_SRC
 
 font.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (set-default-font "Ubuntu Mono-20")
 (set-default-font "Menlo for Powerline-18")
 #+END_SRC
 
@@ -268,6 +264,14 @@ Use web mode for HTML, Django and Drupal templates.
   :mode "\\.scss'")
 #+END_SRC
 
+*** Terraform
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package terraform-mode
+  :ensure t
+  :mode "\\.tf'")
+#+END_SRC
+
 *** JS
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -410,6 +414,33 @@ Show magit window in full screen.
   (helm-projectile-on))
 
 (provide 'projectile-settings)
+=======
+
+*** TODO Helm
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package helm
+  :config
+  (setq helm-mode-fuzzy-match t)
+  (setq helm-M-x-fuzzy-match t))
+#+END_SRC
+
+*** TODO Projectile
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package projectile
+ :bind (("C-c p p" . projectile-switch-project)
+         ("C-c p f" . projectile-find-file))
+  :config
+   (projectile-global-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package helm-projectile
+  :config
+  (helm-projectile-on)
+  (setq helm-projectile-fuzzy-match nil))
+
 #+END_SRC
 
 *** TODO Neotree
