@@ -414,7 +414,7 @@ Show magit window in full screen.
   (helm-projectile-on))
 
 (provide 'projectile-settings)
-=======
+#+END_SRC
 
 *** TODO Helm
 
