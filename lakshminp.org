@@ -1,3 +1,4 @@
+
 #+TITLE: Lakshmi Narasimhan's Emacs configuration
 #+OPTIONS: toc:4 h:4
 #+STARTUP: indent
@@ -68,8 +69,20 @@ Custom variables which get added every time.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+  ;; and `package-pinned-packages`. Most users will not need or want to do this.
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  )
 (package-initialize)
 #+END_SRC
 
@@ -94,22 +107,21 @@ Install =use-package= package for other packages. If you like the configuration,
 *** Theme/Look and feel
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(load-theme 'monokai t)
+(load-theme 'spacemacs-dark t)
 #+END_SRC
 
 font.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(set-default-font "Menlo for Powerline-18")
+(set-default-font "Ubuntu Mono-16")
 #+END_SRC
 
 Powerline.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package smart-mode-line)
-(use-package smart-mode-line-powerline-theme)
-(sml/setup)
-
+  (use-package smart-mode-line)
+  (use-package smart-mode-line-powerline-theme)
+  (sml/setup)
 #+END_SRC
 
 
@@ -208,6 +220,10 @@ Use web mode for HTML, Django and Drupal templates.
   :mode (("\\.tpl\\.php'" . web-mode)
          ("\\.twig\\'"       . web-mode)
          ("\\.html\\'"       . web-mode))
+  :init
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2)
+  (setq-default indent-tabs-mode nil)
 )
 #+END_SRC
 
@@ -276,6 +292,13 @@ Use web mode for HTML, Django and Drupal templates.
 Run gofmt on save.
 
 *** Elm
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package elm-mode
+  :ensure t
+  :mode (("\\.elm\\'" . elm-mode))
+)
+#+END_SRC
+
 
 *** Docker file
 
@@ -388,19 +411,23 @@ Show magit window in full screen.
             (mapcar (lambda (x) (and (file-exists-p x) x))
                     (append '("~/org/ideas.org"
                       "~/org/habit.org"
+                      "~/org/plan.org"
                       "~/org/office.org"
                       "~/org/capture.org"
                       "~/org/learn.org"
-                      "~/org/blog/blogs.org"
                       "~/org/personal.org"
+                      "~/org/violin.org"
+                      "~/org/conf-proposals.org"
                       "~/org/mkting.org"
-                      "~/org/cp.org"
                       "~/org/todo.org"
                       "~/org/mani.org"
+                      "~/org/followups.org"
                       ;;"~/Dropbox/drupal/d8.org"
                       "~/d8book/easybook/doc/drupal-8-module-development/Contents/nd8.org"
                       ;;"~/org/websites.org"
-		      ) (file-expand-wildcards "~/org/projects/*.org")))))
+		      ) (file-expand-wildcards "~/org/projects/*.org")
+                    (file-expand-wildcards "~/org/blog/*.org")
+                      ))))
     (setq org-log-done 'time)
     (setq org-src-fontify-natively t)
     (setq org-use-speed-commands t)
@@ -409,11 +436,20 @@ Show magit window in full screen.
              "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/mkting.org")
 	 "* %?\nEntered on %U\n  %i\n  %a")
-        ("b" "Blog post" entry (file "~/org/blog/blogs.org")
+         ("b" "Blog post" entry (file "~/org/blog/blogs.org")
 	 (file "~/org/tpl-blog.txt") :empty-lines-before 1)
+         ;; daily stuff
+      ("d" "Stuff to do daily")
+      ("dp" "Daily Planning" entry (file+olp "~/org/habit.org" "Daily planning")
+	 (file "~/org/tpl-daily-planning.txt") :empty-lines-before 1 :empty-lines-after 1)
+      ("dr" "Daily Review" entry (file+olp "~/org/habit.org" "Daily review")
+	 (file "~/org/tpl-daily-review.txt") :empty-lines-before 1 :empty-lines-after 1)
+      ("s" "Sales safari" entry (file "~/org/safari.org")
+      (file "~/org/tpl-safari.txt") :empty-lines-before 1 :empty-lines-after 1)
       ("c" "Class" entry (file "~/org/blog/blogs.org")
       "* TODO %^{Course}: Week %^{Week} Lecture %^{Number}\n SCHEDULED: %^{Sched}T\n ** TODO prepare for %\\1-%\\2-%\\3")
       ))
+      
     (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     (setq org-agenda-custom-commands
           '(("@" "Contexts"
@@ -440,3 +476,45 @@ Show magit window in full screen.
 #+END_SRC
 
 *** Leanpub integration
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun org-make-checkbox (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert "- [ ] ")
+      (forward-line))
+    (beginning-of-line)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun org-make-olist (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert (concat (number-to-string (1+ i)) ". "))
+      (forward-line))
+    (beginning-of-line)))
+#+END_SRC
+
+*** Org hugo
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package ox-hugo
+  :ensure t            ;Auto-install the package from Melpa (optional)
+  :after ox)
+#+END_SRC
+
+** Annotation mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package annotate)
+#+END_SRC
