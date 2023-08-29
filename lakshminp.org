@@ -78,6 +78,12 @@ Custom variables which get added every time.
 
 ** Emacs configuration
 
+*** Don't create backup files
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq make-backup-files nil)
+#+END_SRC
+
 *** Load path
 
 Update load path.
@@ -142,15 +148,15 @@ Auto package update.
 *** Theme/Look and feel
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package atom-one-dark-theme :defer t)
+(use-package spacemacs-theme :defer t)
   
-  (load-theme 'atom-one-dark t)
+  (load-theme 'spacemacs-dark t)
 #+END_SRC
 
 font.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(set-frame-font "Ubuntu Mono-18")
+(set-frame-font "Ubuntu Mono-16")
 #+END_SRC
 
 Powerline.
@@ -236,16 +242,6 @@ PHP mode toggling for Drupal 7/8 files.
 )
 #+END_SRC
 
-*** Markdown
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package markdown-mode
-  :ensure t
-  :mode (("\\.md\\'" . markdown-mode)
-         ("\\.text\\'"       . markdown-mode)
-         ("\\.markdown\\'"       . markdown-mode))
-)
-#+END_SRC
 
 *** YAML
 
@@ -453,11 +449,6 @@ Show magit window in full screen.
 *** TODO emacs backup configuration
 *** Golang
 
-Go template mode for Helm files.
-
-#+begin_src emacs-lisp :tangle yes
-(require 'go-template-mode)  
-#+end_src
 
 
 ** Org mode specifics
